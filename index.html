@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixellon - AI/ML Projects for Students</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding-top: 80px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+            border: 2px solid #ff6b6b;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 100px 0;
+            background: #f8f9fa;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .service-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-item i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .project-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .category-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .project-list {
+            list-style: none;
+        }
+
+        .project-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">PixelLON.Inc</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>AI-ML Developers</h1>
+                <p>Build impactful final year projects from scratch with expert guidance</p>
+                <div class="cta-buttons">
+                    <a href="https://forms.gle/86DD1rVPpXpnaoSd7" class="btn btn-primary" target="_blank">Get Started</a>
+                    <a href="#projects" class="btn btn-secondary">View Projects</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title fade-in">About Us</h2>
+            <p class="fade-in" style="text-align: center; font-size: 1.1rem; max-width: 800px; margin: 0 auto;">
+                We are a passionate team of AI, Machine Learning, and Data Science experts committed to helping Computer Science Engineering students build impactful final year projects from scratch. Our mission is to simplify complex tech, provide real-world project exposure, and help you stand out with industry-grade work.
+            </p>
+            
+            <div class="about-grid">
+                <div class="feature-card fade-in">
+                    <i class="fas fa-flask"></i>
+                    <h3>Real-Time Implementation</h3>
+                    <p>Learn core AI/ML algorithms with hands-on project building</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <i class="fas fa-user-graduate"></i>
+                    <h3>Personalized Guidance</h3>
+                    <p>1:1 mentorship from experts, not just kit delivery</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <i class="fas fa-industry"></i>
+                    <h3>Industry-Driven Problems</h3>
+                    <p>Work on real-world problem statements</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title fade-in">What We Offer</h2>
+            <div class="services-grid">
+                <div class="service-item fade-in">
+                    <i class="fas fa-code"></i>
+                    <h3>Ready to Use Projects</h3>
+                    <p>Complete AI-ML projects with source code</p>
+                </div>
+                <div class="service-item fade-in">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h3>1:1 Mentorship</h3>
+                    <p>Personal guidance from industry experts</p>
+                </div>
+                <div class="service-item fade-in">
+                    <i class="fas fa-route"></i>
+                    <h3>Step-by-Step Guidance</h3>
+                    <p>Complete project walkthrough and training</p>
+                </div>
+                <div class="service-item fade-in">
+                    <i class="fas fa-file-powerpoint"></i>
+                    <h3>Complete Documentation</h3>
+                    <p>Source code, PPTs, and documentation</p>
+                </div>
+                <div class="service-item fade-in">
+                    <i class="fas fa-brain"></i>
+                    <h3>Concept Training</h3>
+                    <p>Learn the why and how behind the code</p>
+                </div>
+                <div class="service-item fade-in">
+                    <i class="fas fa-question-circle"></i>
+                    <h3>Doubt Clearance</h3>
+                    <p>Regular sessions to clear your doubts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title fade-in">Project Domains</h2>
+            <div class="project-categories">
+                <div class="category-card fade-in">
+                    <h3><i class="fas fa-robot"></i> Machine Learning</h3>
+                    <ul class="project-list">
+                        <li>Credit Card Fraud Detection</li>
+                        <li>Heart Disease Prediction</li>
+                        <li>Wine Quality Prediction</li>
+                        <li>Loan Approval Prediction</li>
+                        <li>Smart Diabetes Prediction</li>
+                        <li>CO₂ Emission Rating by Vehicles</li>
+                    </ul>
+                </div>
+                <div class="category-card fade-in">
+                    <h3><i class="fas fa-brain"></i> Deep Learning</h3>
+                    <ul class="project-list">
+                        <li>Speech Emotion Recognition</li>
+                        <li>Skin Cancer Detection using CNN</li>
+                        <li>Deepfake Detection</li>
+                        <li>Image Recognition for Medical Diagnosis</li>
+                        <li>Gesture Recognition for Sign Language</li>
+                        <li>Smart Traffic Management System</li>
+                    </ul>
+                </div>
+                <div class="category-card fade-in">
+                    <h3><i class="fas fa-language"></i> NLP Projects</h3>
+                    <ul class="project-list">
+                        <li>Fake News Detection</li>
+                        <li>Language Translation with LSTM</li>
+                        <li>ML-based Text Summarization</li>
+                        <li>Social Media Sentiment Analysis</li>
+                        <li>Medical Chatbot for Symptom Checking</li>
+                    </ul>
+                </div>
+                <div class="category-card fade-in">
+                    <h3><i class="fas fa-eye"></i> Computer Vision</h3>
+                    <ul class="project-list">
+                        <li>Crop Disease Detection using Leaf Images</li>
+                        <li>Wildlife Conservation using CV</li>
+                        <li>Face Mask Detection</li>
+                        <li>Waste Segregation System with AI</li>
+                        <li>Illegal Fishing Detection via Geospatial Vision</li>
+                    </ul>
+                </div>
+                <div class="category-card fade-in">
+                    <h3><i class="fas fa-chart-line"></i> Time Series/Forecasting</h3>
+                    <ul class="project-list">
+                        <li>Stock Price Prediction (LSTM/ARIMA)</li>
+                        <li>Disease Outbreak Forecasting</li>
+                        <li>Personalized Finance Tracker</li>
+                        <li>Dynamic Pricing Model for E-Commerce</li>
+                    </ul>
+                </div>
+                <div class="category-card fade-in">
+                    <h3><i class="fas fa-plus"></i> 30+ More Projects</h3>
+                    <p style="margin-top: 1rem;">Explore our extensive collection of AI/ML projects across various domains and difficulty levels.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p>Ready to start your AI/ML project journey? Contact us today!</p>
+            
+            <div class="contact-info">
+                <div class="contact-item fade-in">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email Us</h3>
+                    <p>pixellon.work@gmail.com</p>
+                </div>
+                <div class="contact-item fade-in">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>Quick Enquiry</h3>
+                    <a href="https://forms.gle/86DD1rVPpXpnaoSd7" target="_blank" class="btn btn-primary" style="margin-top: 1rem;">Fill Google Form</a>
+                </div>
+                <div class="contact-item fade-in">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Academic Support</h3>
+                    <p>100% Academic Compliant & Review-Ready</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Pixellon.Inc. All rights reserved. | Empowering Students with AI/ML Excellence</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
