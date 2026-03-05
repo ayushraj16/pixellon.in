@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixellon — All Talents, One Vibe!</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0057FF;
+  --blue-light: #4D8EFF;
+  --blue-pale: #C8DCFF;
+  --cyan: #00E5FF;
+  --yellow: #FFE600;
+  --black: #0A0A0A;
+  --white: #FAFAFA;
+  --grid-color: rgba(0,87,255,0.07);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  width: 12px; height: 12px;
+  background: var(--blue);
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  image-rendering: pixelated;
+  transition: transform 0.1s;
+}
+.cursor-trail {
+  width: 6px; height: 6px;
+  background: var(--cyan);
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transition: all 0.15s ease;
+}
+
+/* GRID BACKGROUND */
+.grid-bg {
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none; z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 16px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(250,250,250,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--blue);
+}
+
+.nav-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--blue);
+  text-decoration: none;
+  letter-spacing: -1px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.nav-logo .p-icon {
+  width: 32px; height: 32px;
+  background: var(--blue);
+  display: grid; place-items: center;
+  font-size: 10px;
+  color: white;
+  image-rendering: pixelated;
+  clip-path: polygon(0 0,75% 0,75% 50%,50% 50%,50% 100%,0 100%);
+}
+
+.nav-links {
+  display: flex; gap: 32px; list-style: none;
+}
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--black);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px;
+  background: var(--blue);
+  transition: width 0.2s;
+}
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  cursor: none;
+  text-decoration: none;
+  display: inline-block;
+  image-rendering: pixelated;
+  position: relative;
+  transition: transform 0.1s;
+  box-shadow: 4px 4px 0 var(--black);
+}
+.nav-cta:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
+.nav-cta:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--black); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 120px 40px 80px;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+
+.hero-content { max-width: 700px; }
+
+.hero-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--blue);
+  background: var(--blue-pale);
+  padding: 6px 14px;
+  display: inline-block;
+  margin-bottom: 24px;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--blue);
+}
+
+.hero-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(28px, 5vw, 56px);
+  line-height: 1.4;
+  color: var(--black);
+  margin-bottom: 12px;
+}
+
+.hero-title span {
+  color: var(--blue);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-title span::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 4px;
+  background: var(--yellow);
+  animation: scanline 2s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: scaleX(0); transform-origin: left; }
+  50% { transform: scaleX(1); transform-origin: left; }
+  51% { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
+.hero-sub {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  color: var(--blue-light);
+  margin-bottom: 32px;
+  letter-spacing: 0.05em;
+}
+
+.hero-desc {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #444;
+  margin-bottom: 48px;
+  max-width: 520px;
+}
+
+.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn-primary {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 18px 28px;
+  cursor: none;
+  text-decoration: none;
+  box-shadow: 5px 5px 0 var(--black);
+  transition: all 0.1s;
+  display: inline-block;
+}
+.btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--black); background: #0047DD; }
+
+.btn-outline {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  background: transparent;
+  color: var(--blue);
+  border: 2px solid var(--blue);
+  padding: 18px 28px;
+  cursor: none;
+  text-decoration: none;
+  box-shadow: 5px 5px 0 var(--blue-pale);
+  transition: all 0.1s;
+  display: inline-block;
+}
+.btn-outline:hover { background: var(--blue-pale); transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--blue-pale); }
+
+/* FLOATING PIXELS */
+.pixel-float {
+  position: absolute;
+  image-rendering: pixelated;
+  animation: floatPixel 6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes floatPixel {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(5deg); }
+  66% { transform: translateY(10px) rotate(-3deg); }
+}
+
+.px1 { width:20px;height:20px;background:var(--yellow);top:20%;right:15%;animation-delay:-1s; }
+.px2 { width:12px;height:12px;background:var(--cyan);top:35%;right:25%;animation-delay:-3s; }
+.px3 { width:32px;height:32px;background:var(--blue-pale);top:60%;right:10%;animation-delay:-2s; }
+.px4 { width:8px;height:8px;background:var(--blue);top:25%;right:40%;animation-delay:-4s; }
+.px5 { width:16px;height:16px;background:#FF6B6B;bottom:30%;right:30%;animation-delay:-0.5s; }
+
+.hero-pixel-art {
+  position: absolute;
+  right: 60px; top: 50%;
+  transform: translateY(-50%);
+  width: 280px;
+  opacity: 0.12;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 180px;
+  color: var(--blue);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* MARQUEE */
+.marquee-wrap {
+  background: var(--blue);
+  padding: 14px 0;
+  overflow: hidden;
+  position: relative; z-index: 1;
+  border-top: 3px solid var(--black);
+  border-bottom: 3px solid var(--black);
+}
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  animation: marquee 20s linear infinite;
+  white-space: nowrap;
+}
+.marquee-track span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: white;
+  flex-shrink: 0;
+}
+.marquee-track .dot {
+  color: var(--yellow);
+  margin: 0 8px;
+}
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* SECTIONS */
+section { position: relative; z-index: 1; }
+
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--blue);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 3px;
+  background: var(--blue);
+  display: inline-block;
+}
+
+.section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(18px, 3vw, 32px);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* WHAT IS PIXELLON */
+.about {
+  padding: 100px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-visual {
+  position: relative;
+}
+
+.about-big-p {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 200px;
+  color: var(--blue);
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+}
+
+.about-big-p .face {
+  position: absolute;
+  top: 18%; left: 17%;
+  width: 52%; height: 52%;
+  background: white;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border: 3px solid var(--black);
+}
+.about-big-p .face .eyes {
+  display: flex; gap: 14px;
+  margin-bottom: 10px;
+}
+.about-big-p .face .eyes span {
+  font-size: 24px;
+}
+.about-big-p .face .smile {
+  width: 40px; height: 20px;
+  border-bottom: 3px solid var(--black);
+  border-radius: 0 0 40px 40px;
+}
+
+.about-card {
+  background: white;
+  border: 2px solid var(--black);
+  padding: 28px;
+  margin-top: 20px;
+  box-shadow: 6px 6px 0 var(--blue-pale);
+  position: relative;
+}
+
+.about-card::before {
+  content: attr(data-num);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  background: var(--yellow);
+  color: var(--black);
+  padding: 4px 8px;
+  position: absolute;
+  top: -14px; left: 16px;
+}
+
+.about-card h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--blue);
+}
+
+.about-card p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* FEATURES */
+.features {
+  padding: 100px 40px;
+  background: var(--black);
+  overflow: hidden;
+}
+
+.features-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+
+.features .section-label { color: var(--cyan); }
+.features .section-label::before { background: var(--cyan); }
+.features .section-title { color: white; }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+  border: 2px solid #222;
+}
+
+.feat-card {
+  background: #111;
+  padding: 40px 32px;
+  border: 1px solid #222;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+
+.feat-card:hover {
+  background: #0057FF18;
+}
+
+.feat-card:hover .feat-num {
+  color: var(--blue);
+}
+
+.feat-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 42px;
+  color: #222;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+  display: block;
+}
+
+.feat-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.feat-card h3 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: white;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.feat-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #888;
+}
+
+.feat-card .feat-tag {
+  margin-top: 20px;
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  background: rgba(0,229,255,0.1);
+  padding: 4px 10px;
+  border: 1px solid rgba(0,229,255,0.2);
+}
+
+/* COMMUNITY FORUM HIGHLIGHT */
+.forum-section {
+  padding: 100px 40px;
+  max-width: 1200px; margin: 0 auto;
+}
+
+.forum-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.forum-mockup {
+  background: white;
+  border: 2px solid var(--black);
+  box-shadow: 8px 8px 0 var(--blue);
+  overflow: hidden;
+}
+
+.forum-bar {
+  background: var(--blue);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.forum-bar span {
+  width: 10px; height: 10px;
+  background: var(--yellow);
+  display: inline-block;
+  image-rendering: pixelated;
+}
+.forum-bar .title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: white;
+  flex: 1;
+  text-align: center;
+}
+
+.forum-post {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+.forum-post:hover { background: #f5f8ff; }
+.forum-post:last-child { border-bottom: none; }
+
+.post-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px;
+}
+.post-avatar {
+  width: 28px; height: 28px;
+  background: var(--blue);
+  display: grid; place-items: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px; color: white;
+  flex-shrink: 0;
+}
+.post-meta { flex: 1; }
+.post-author {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; font-weight: 700;
+  color: var(--black);
+}
+.post-time {
+  font-size: 11px; color: #999;
+}
+.post-text {
+  font-size: 13px; line-height: 1.5; color: #444;
+  margin-bottom: 8px;
+}
+.post-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.post-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--blue);
+  background: var(--blue-pale);
+  padding: 2px 8px;
+}
+.post-reactions {
+  margin-top: 8px;
+  display: flex; gap: 12px;
+}
+.reaction {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: #888;
+  display: flex; align-items: center; gap: 4px;
+  cursor: none;
+}
+.reaction:hover { color: var(--blue); }
+
+/* WHO JOINS */
+.who {
+  padding: 80px 40px;
+  background: var(--yellow);
+  overflow: hidden;
+}
+.who-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.who .section-label { color: var(--black); }
+.who .section-label::before { background: var(--black); }
+.who .section-title { color: var(--black); }
+
+.who-cards {
+  display: flex; gap: 24px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+
+.who-card {
+  flex: 1; min-width: 200px;
+  background: white;
+  border: 2px solid var(--black);
+  padding: 32px 24px;
+  box-shadow: 5px 5px 0 var(--black);
+  text-align: center;
+  transition: transform 0.15s;
+}
+.who-card:hover { transform: translate(-4px,-4px); }
+
+.who-card .emoji { font-size: 40px; margin-bottom: 16px; display: block; }
+.who-card h3 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.who-card p { font-size: 13px; color: #666; line-height: 1.5; }
+
+/* STATS */
+.stats {
+  padding: 80px 40px;
+  background: var(--blue);
+}
+.stats-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 2px;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+.stat-item {
+  padding: 40px 24px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.stat-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(22px,3vw,36px);
+  color: var(--yellow);
+  margin-bottom: 12px;
+  display: block;
+}
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* CTA */
+.cta-section {
+  padding: 120px 40px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+
+.cta-section::before {
+  content: 'pixellon';
+  font-family: 'Press Start 2P', monospace;
+  font-size: 180px;
+  color: var(--blue-pale);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: -10px;
+  user-select: none;
+}
+
+.cta-inner {
+  position: relative; z-index: 1;
+  max-width: 600px; margin: 0 auto;
+}
+
+.cta-inner .section-title {
+  font-size: clamp(22px,4vw,42px);
+  margin-bottom: 20px;
+}
+
+.cta-inner p {
+  font-size: 16px; color: #666;
+  margin-bottom: 40px; line-height: 1.6;
+}
+
+/* FOOTER */
+footer {
+  background: var(--black);
+  padding: 60px 40px;
+  border-top: 3px solid var(--blue);
+}
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 60px;
+}
+.footer-brand .logo-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: var(--blue);
+  display: block; margin-bottom: 16px;
+}
+.footer-brand p {
+  font-size: 13px; color: #666;
+  line-height: 1.6; margin-bottom: 20px;
+}
+.footer-brand .tagline {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: var(--cyan);
+}
+.footer-col h4 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px; color: white;
+  margin-bottom: 20px;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li {
+  margin-bottom: 12px;
+}
+.footer-col ul li a {
+  font-size: 13px; color: #666;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  transition: color 0.2s;
+}
+.footer-col ul li a:hover { color: var(--blue); }
+
+.footer-bottom {
+  max-width: 1200px; margin: 40px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid #222;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-bottom p {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px; color: #444;
+}
+.footer-bottom .made-with {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px; color: #333;
+}
+
+/* SCROLL ANIMATIONS */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-animate].visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-animate="left"] { transform: translateX(-40px); }
+[data-animate="left"].visible { transform: translateX(0); }
+[data-animate="right"] { transform: translateX(40px); }
+[data-animate="right"].visible { transform: translateX(0); }
+
+/* HAMBURGER */
+.hamburger { display: none; }
+
+/* PIXEL BLINK */
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.blink { animation: blink 1s step-end infinite; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .hamburger {
+    display: flex; flex-direction: column; gap: 5px;
+    cursor: none; background: none; border: none;
+  }
+  .hamburger span { width: 24px; height: 2px; background: var(--black); display: block; }
+
+  .hero { padding: 100px 20px 60px; }
+  .hero-pixel-art { display: none; }
+  .px1,.px2,.px3,.px4,.px5 { display: none; }
+
+  .about {
+    grid-template-columns: 1fr;
+    gap: 40px; padding: 60px 20px;
+  }
+  .about-big-p { font-size: 120px; }
+
+  .features { padding: 60px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+
+  .forum-container { grid-template-columns: 1fr; padding: 60px 20px; }
+  .forum-section { padding: 60px 20px; }
+
+  .who { padding: 60px 20px; }
+  .who-cards { flex-direction: column; }
+
+  .stats-inner { grid-template-columns: 1fr 1fr; }
+
+  .cta-section { padding: 80px 20px; }
+  .cta-section::before { font-size: 60px; }
+
+  footer { padding: 40px 20px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <rect x="0" y="0" width="20" height="28" fill="#0057FF"/>
+      <rect x="20" y="0" width="12" height="16" fill="#0057FF"/>
+      <rect x="20" y="16" width="12" height="12" fill="none"/>
+      <rect x="4" y="4" width="20" height="20" fill="white"/>
+      <text x="5" y="20" font-family="monospace" font-size="14" fill="#0A0A0A">✦✦</text>
+      <rect x="24" y="20" width="8" height="8" fill="#0057FF"/>
+    </svg>
+    pixellon
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#forum">Forum</a></li>
+    <li><a href="#join">Join</a></li>
+  </ul>
+  <a href="#join" class="nav-cta">JOIN US ▶</a>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-pixel-art">P</div>
+  <div class="pixel-float px1"></div>
+  <div class="pixel-float px2"></div>
+  <div class="pixel-float px3"></div>
+  <div class="pixel-float px4"></div>
+  <div class="pixel-float px5"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag" data-animate>✦ COMMUNITY PLATFORM</div>
+    <h1 class="hero-title" data-animate>
+      ALL TALENTS,<br><span>ONE VIBE<span class="blink">_</span></span>
+    </h1>
+    <p class="hero-sub" data-animate>★ Introducing Pixellon ★</p>
+    <p class="hero-desc" data-animate>
+      A collaborative learning & knowledge-sharing community where students, creators, and professionals come together. Learn, create, showcase — and share your <em>real</em> educational journey.
+    </p>
+    <div class="hero-btns" data-animate>
+      <a href="#join" class="btn-primary">JOIN THE COMMUNITY ▶</a>
+      <a href="#features" class="btn-outline">EXPLORE →</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>LEARN <span class="dot">★</span></span>
+    <span>CREATE <span class="dot">★</span></span>
+    <span>SHOWCASE <span class="dot">★</span></span>
+    <span>CONNECT <span class="dot">★</span></span>
+    <span>GROW <span class="dot">★</span></span>
+    <span>SHARE YOUR JOURNEY <span class="dot">★</span></span>
+    <span>ALL TALENTS ONE VIBE <span class="dot">★</span></span>
+    <span>LEARN <span class="dot">★</span></span>
+    <span>CREATE <span class="dot">★</span></span>
+    <span>SHOWCASE <span class="dot">★</span></span>
+    <span>CONNECT <span class="dot">★</span></span>
+    <span>GROW <span class="dot">★</span></span>
+    <span>SHARE YOUR JOURNEY <span class="dot">★</span></span>
+    <span>ALL TALENTS ONE VIBE <span class="dot">★</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about">
+    <div class="about-visual" data-animate="left">
+      <div class="about-big-p">
+        P
+        <div class="face">
+          <div class="eyes"><span>✦</span><span>✦</span></div>
+          <div class="smile"></div>
+        </div>
+      </div>
+    </div>
+    <div data-animate="right">
+      <div class="section-label">What is Pixellon</div>
+      <h2 class="section-title">MORE THAN A<br>PLATFORM.</h2>
+      <p style="font-size:16px;line-height:1.8;color:#555;margin-bottom:32px;">
+        Pixellon is where your real educational journey gets heard. Not just another course site — a living, breathing community where people do <em>anything</em> together.
+      </p>
+
+      <div class="about-card" data-num="01">
+        <h3>🎓 For College Students & Beyond</h3>
+        <p>Build final year projects, learn AI/ML, get mentored — all in one place. From beginners to professionals.</p>
+      </div>
+      <div class="about-card" data-num="02" style="margin-top:16px;">
+        <h3>💬 Honest Reviews, Real Voices</h3>
+        <p>Our community forum is different. Share genuine reviews of your educational journey — what worked, what didn't.</p>
+      </div>
+      <div class="about-card" data-num="03" style="margin-top:16px;">
+        <h3>🚀 Showcase Your Work</h3>
+        <p>Got a project? A skill? Show it off. Pixellon celebrates every talent, big or small.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="section-label" data-animate>What We Offer</div>
+    <h2 class="section-title" data-animate>EVERYTHING YOU<br>NEED TO THRIVE.</h2>
+    <div class="features-grid">
+      <div class="feat-card" data-animate>
+        <span class="feat-num">01</span>
+        <span class="feat-icon">🧠</span>
+        <h3>COLLABORATIVE LEARNING</h3>
+        <p>Learn together. Share notes, resources, project ideas, and breakthroughs in real time with people on the same journey.</p>
+        <span class="feat-tag">COMMUNITY-FIRST</span>
+      </div>
+      <div class="feat-card" data-animate>
+        <span class="feat-num">02</span>
+        <span class="feat-icon">💬</span>
+        <h3>COMMUNITY FORUM</h3>
+        <p>Post genuine reviews of courses, colleges, and learning paths. Help others make informed decisions with your real experience.</p>
+        <span class="feat-tag">HONEST REVIEWS</span>
+      </div>
+      <div class="feat-card" data-animate>
+        <span class="feat-num">03</span>
+        <span class="feat-icon">🎯</span>
+        <h3>TALENT SHOWCASE</h3>
+        <p>Present your projects, skills, artwork, code — anything you've built. Get feedback and recognition from the community.</p>
+        <span class="feat-tag">ALL TALENTS</span>
+      </div>
+      <div class="feat-card" data-animate>
+        <span class="feat-num">04</span>
+        <span class="feat-icon">🏆</span>
+        <h3>EVENTS & CHALLENGES</h3>
+        <p>Hackathons, design sprints, quiz competitions — participate and win. Challenges designed to push and grow your skills.</p>
+        <span class="feat-tag">COMPETE & WIN</span>
+      </div>
+      <div class="feat-card" data-animate>
+        <span class="feat-num">05</span>
+        <span class="feat-icon">🤝</span>
+        <h3>MENTORSHIP NETWORK</h3>
+        <p>Connect with seniors, professionals, and domain experts. Get 1:1 guidance on projects, careers, and learning paths.</p>
+        <span class="feat-tag">GROW TOGETHER</span>
+      </div>
+      <div class="feat-card" data-animate>
+        <span class="feat-num">06</span>
+        <span class="feat-icon">🛠️</span>
+        <h3>AI/ML PROJECT HUB</h3>
+        <p>Ready-to-use project templates, source code, PPTs. Step-by-step guidance with industry-grade, review-ready deliverables.</p>
+        <span class="feat-tag">BUILD REAL THINGS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORUM HIGHLIGHT -->
+<section id="forum" class="forum-section">
+  <div class="forum-container">
+    <div data-animate="left">
+      <div class="section-label">Community Forum</div>
+      <h2 class="section-title">THE FORUM<br>THAT'S<br>DIFFERENT.</h2>
+      <p style="font-size:16px;line-height:1.8;color:#555;margin-bottom:24px;">
+        Every other platform hides the real story. On Pixellon, you share <strong>genuine reviews</strong> of your educational journey — the good, the bad, and everything in between.
+      </p>
+      <p style="font-size:14px;color:#888;line-height:1.7;margin-bottom:32px;">
+        Was that course worth it? Did your college actually teach you anything? What project actually got you placed? Real answers from real people.
+      </p>
+      <a href="#join" class="btn-primary">EXPLORE THE FORUM ▶</a>
+    </div>
+    <div class="forum-mockup" data-animate="right">
+      <div class="forum-bar">
+        <span></span><span style="background:#FF6B6B"></span><span style="background:#00E5FF"></span>
+        <span class="title">pixellon / community-forum</span>
+      </div>
+
+      <div class="forum-post">
+        <div class="post-header">
+          <div class="post-avatar">A</div>
+          <div class="post-meta">
+            <div class="post-author">@arjun_dev</div>
+            <div class="post-time">2 hours ago</div>
+          </div>
+        </div>
+        <div class="post-text">Honestly, the AI/ML course at XYZ was overhyped. Pixellon's project hub helped me build something that actually got me an interview! Here's what worked 👇</div>
+        <div class="post-tags">
+          <span class="post-tag">ai/ml</span>
+          <span class="post-tag">review</span>
+          <span class="post-tag">placement</span>
+        </div>
+        <div class="post-reactions">
+          <span class="reaction">💙 48</span>
+          <span class="reaction">💬 12 replies</span>
+        </div>
+      </div>
+
+      <div class="forum-post">
+        <div class="post-header">
+          <div class="post-avatar" style="background:#FF6B6B">P</div>
+          <div class="post-meta">
+            <div class="post-author">@priya_creates</div>
+            <div class="post-time">5 hours ago</div>
+          </div>
+        </div>
+        <div class="post-text">Submitted my final year project via Pixellon mentors. Got 100% academic compliance AND it's actually deployed! Best decision of my CS journey 🚀</div>
+        <div class="post-tags">
+          <span class="post-tag">final-year</span>
+          <span class="post-tag">project</span>
+        </div>
+        <div class="post-reactions">
+          <span class="reaction">💙 91</span>
+          <span class="reaction">💬 7 replies</span>
+        </div>
+      </div>
+
+      <div class="forum-post">
+        <div class="post-header">
+          <div class="post-avatar" style="background:#00C853">R</div>
+          <div class="post-meta">
+            <div class="post-author">@rahul_pixels</div>
+            <div class="post-time">1 day ago</div>
+          </div>
+        </div>
+        <div class="post-text">Won the hackathon challenge this week! The prep resources here are actually better than Udemy for real problems. No cap 🏆</div>
+        <div class="post-tags">
+          <span class="post-tag">hackathon</span>
+          <span class="post-tag">win</span>
+        </div>
+        <div class="post-reactions">
+          <span class="reaction">💙 134</span>
+          <span class="reaction">💬 23 replies</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO JOINS -->
+<section class="who">
+  <div class="who-inner">
+    <div class="section-label" data-animate>Who Is It For</div>
+    <h2 class="section-title" data-animate>EVERYONE IS<br>WELCOME.</h2>
+    <div class="who-cards">
+      <div class="who-card" data-animate>
+        <span class="emoji">🎓</span>
+        <h3>STUDENTS</h3>
+        <p>College students building projects, prepping for placements, and finding their path in tech.</p>
+      </div>
+      <div class="who-card" data-animate>
+        <span class="emoji">💼</span>
+        <h3>PROFESSIONALS</h3>
+        <p>Working folks who want to upskill, mentor juniors, and give back to the community.</p>
+      </div>
+      <div class="who-card" data-animate>
+        <span class="emoji">🎨</span>
+        <h3>CREATORS</h3>
+        <p>Designers, writers, artists, makers — every talent has a home on Pixellon.</p>
+      </div>
+      <div class="who-card" data-animate>
+        <span class="emoji">🔬</span>
+        <h3>RESEARCHERS</h3>
+        <p>Those pushing boundaries in AI, data science, and emerging tech fields.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat-item" data-animate>
+      <span class="stat-num">500+</span>
+      <span class="stat-label">Members & Growing</span>
+    </div>
+    <div class="stat-item" data-animate>
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Projects Completed</span>
+    </div>
+    <div class="stat-item" data-animate>
+      <span class="stat-num">∞</span>
+      <span class="stat-label">Talents Welcome</span>
+    </div>
+    <div class="stat-item" data-animate>
+      <span class="stat-num">1</span>
+      <span class="stat-label">Community. One Vibe.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="join">
+  <div class="cta-inner">
+    <div class="section-label" style="justify-content:center" data-animate>Ready?</div>
+    <h2 class="section-title" data-animate>JOIN THE VIBE.<br>IT'S FREE.</h2>
+    <p data-animate>
+      Stop scrolling. Start building. Pixellon is where your real journey begins — with people who actually get it.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" data-animate>
+      <a href="https://forms.gle/86DD1rVPpXpnaoSd7" target="_blank" class="btn-primary">JOIN NOW — IT'S FREE ▶</a>
+      <a href="mailto:pixellon.work@gmail.com" class="btn-outline">MAIL US →</a>
+    </div>
+    <p style="margin-top:24px;font-family:'Space Mono',monospace;font-size:11px;color:#aaa;" data-animate>
+      pixellon.work@gmail.com
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-text">pixellon</span>
+      <p>A collaborative learning & knowledge-sharing community where all talents thrive together.</p>
+      <span class="tagline">// All talents, one vibe!</span>
+    </div>
+    <div class="footer-col">
+      <h4>PLATFORM</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#forum">Community Forum</a></li>
+        <li><a href="#join">Join Now</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>CONTACT</h4>
+      <ul>
+        <li><a href="mailto:pixellon.work@gmail.com">Email Us</a></li>
+        <li><a href="https://forms.gle/86DD1rVPpXpnaoSd7">Enquiry Form</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Pixellon.inc — All talents, one vibe!</p>
+    <span class="made-with">MADE WITH ♥ BY PIXELLON TEAM</span>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 6 + 'px';
+  cursor.style.top = my - 6 + 'px';
+});
+
+setInterval(() => {
+  tx += (mx - tx) * 0.15;
+  ty += (my - ty) * 0.15;
+  trail.style.left = tx - 3 + 'px';
+  trail.style.top = ty - 3 + 'px';
+}, 16);
+
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.style.transform = 'scale(2.5)');
+  el.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+});
+
+// Scroll animations
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el));
+
+// Stagger children
+document.querySelectorAll('.features-grid,.who-cards,.stats-inner').forEach(parent => {
+  Array.from(parent.children).forEach((child, i) => {
+    if (!child.hasAttribute('data-animate')) {
+      child.setAttribute('data-animate','');
+      child.style.transitionDelay = (i * 0.1) + 's';
+      obs.observe(child);
+    } else {
+      child.style.transitionDelay = (i * 0.1) + 's';
+    }
+  });
+});
+
+// Counter animation
+function animateCount(el, target, suffix = '') {
+  let start = 0;
+  const dur = 1500;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / dur, 1);
+    const val = Math.floor(progress * target);
+    el.textContent = val + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  };
+  requestAnimationFrame(step);
+}
+
+const statsObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const nums = e.target.querySelectorAll('.stat-num');
+      nums.forEach(n => {
+        const txt = n.textContent;
+        if (txt === '∞' || txt === '1') return;
+        const num = parseInt(txt);
+        const suf = txt.includes('+') ? '+' : '';
+        animateCount(n, num, suf);
+      });
+      statsObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+const statsEl = document.querySelector('.stats');
+if (statsEl) statsObs.observe(statsEl);
+</script>
+</body>
+</html>
