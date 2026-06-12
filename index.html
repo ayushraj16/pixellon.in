@@ -1110,6 +1110,122 @@
       }
     }
 
+    // -------------------------------------------------------------------------
+    // PIXEL EATER & BOXES (BACKGROUND INTERACTION)
+    // -------------------------------------------------------------------------
+    const pixelBoxes = [];
+    const maxPixelBoxes = 6;
+    
+    function spawnPixelBox() {
+      if (points.length === 0) return;
+      const p = points[Math.floor(Math.random() * points.length)];
+      const colors = ['#0057FF', '#00E5FF', '#FFE600', '#FF3B30'];
+      pixelBoxes.push({
+        x: p.ox,
+        y: p.oy,
+        size: 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 0,
+        scale: 0
+      });
+    }
+
+    class PixelEater {
+      constructor() {
+        this.x = window.innerWidth / 2;
+        this.y = window.innerHeight / 2;
+        this.speed = 3.5;
+        this.size = 14;
+        this.angle = 0;
+        this.mouthAngle = 0;
+        this.mouthSpeed = 0.15;
+        this.mouthMax = 0.4;
+        this.mouthDir = 1;
+        this.currentTarget = null;
+      }
+
+      update() {
+        if (!this.currentTarget || !pixelBoxes.includes(this.currentTarget)) {
+          this.currentTarget = null;
+          let minDistance = Infinity;
+          pixelBoxes.forEach(box => {
+            const dist = Math.hypot(box.x - this.x, box.y - this.y);
+            if (dist < minDistance) {
+              minDistance = dist;
+              this.currentTarget = box;
+            }
+          });
+        }
+
+        if (this.currentTarget) {
+          const target = this.currentTarget;
+          const dx = target.x - this.x;
+          const dy = target.y - this.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist > 6) {
+            this.x += (dx / dist) * this.speed;
+            this.y += (dy / dist) * this.speed;
+            this.angle = Math.atan2(dy, dx);
+
+            this.mouthAngle += this.mouthSpeed * this.mouthDir;
+            if (this.mouthAngle >= this.mouthMax || this.mouthAngle <= 0) {
+              this.mouthDir *= -1;
+            }
+          } else {
+            // Eat!
+            spawnExplosion(target.x, target.y, 15, target.color);
+            const index = pixelBoxes.indexOf(target);
+            if (index > -1) {
+              pixelBoxes.splice(index, 1);
+            }
+            this.currentTarget = null;
+            spawnPixelBox();
+          }
+        } else {
+          this.x += Math.cos(this.angle) * (this.speed * 0.5);
+          this.y += Math.sin(this.angle) * (this.speed * 0.5);
+          if (Math.random() < 0.02) {
+            this.angle += (Math.random() - 0.5) * Math.PI;
+          }
+          this.x = Math.max(20, Math.min(window.innerWidth - 20, this.x));
+          this.y = Math.max(20, Math.min(window.innerHeight - 20, this.y));
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+
+        // Pac-Man body
+        ctx.fillStyle = '#FFE600';
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size, this.mouthAngle, Math.PI * 2 - this.mouthAngle);
+        ctx.lineTo(0, 0);
+        ctx.closePath();
+        ctx.fill();
+
+        // Eye
+        ctx.fillStyle = '#0A0A0A';
+        ctx.beginPath();
+        ctx.arc(this.size * 0.3, -this.size * 0.45, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    let bgEater = null;
+
+    function initBgEater() {
+      pixelBoxes.length = 0;
+      for (let i = 0; i < maxPixelBoxes; i++) {
+        spawnPixelBox();
+      }
+      bgEater = new PixelEater();
+    }
+
     function animateBg() {
       ctx.fillStyle = '#FAFAFA';
       ctx.fillRect(0, 0, width, height);
@@ -1186,10 +1302,32 @@
         if (particles[i].alpha <= 0) particles.splice(i, 1);
       }
 
+      // Update and draw Pixel Boxes
+      pixelBoxes.forEach(box => {
+        if (box.alpha < 1) box.alpha += 0.05;
+        if (box.scale < 1) box.scale += 0.1;
+
+        ctx.save();
+        ctx.globalAlpha = box.alpha * 0.8;
+        ctx.fillStyle = box.color;
+        ctx.shadowColor = box.color;
+        ctx.shadowBlur = 6;
+        const currentSize = box.size * box.scale;
+        ctx.fillRect(box.x - currentSize / 2, box.y - currentSize / 2, currentSize, currentSize);
+        ctx.restore();
+      });
+
+      // Update and draw Pixel Eater
+      if (bgEater) {
+        bgEater.update();
+        bgEater.draw();
+      }
+
       requestAnimationFrame(animateBg);
     }
 
     initCanvas();
+    initBgEater();
     animateBg();
 
     // -------------------------------------------------------------------------
