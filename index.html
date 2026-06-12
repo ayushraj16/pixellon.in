@@ -1,1224 +1,1935 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pixellon — All Talents, One Vibe!</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --blue: #0057FF;
-  --blue-light: #4D8EFF;
-  --blue-pale: #C8DCFF;
-  --cyan: #00E5FF;
-  --yellow: #FFE600;
-  --black: #0A0A0A;
-  --white: #FAFAFA;
-  --grid-color: rgba(0,87,255,0.07);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--white);
-  color: var(--black);
-  font-family: 'DM Sans', sans-serif;
-  overflow-x: hidden;
-  cursor: none;
-}
-
-/* CUSTOM CURSOR */
-.cursor {
-  width: 12px; height: 12px;
-  background: var(--blue);
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
-  image-rendering: pixelated;
-  transition: transform 0.1s;
-}
-.cursor-trail {
-  width: 6px; height: 6px;
-  background: var(--cyan);
-  position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9998;
-  transition: all 0.15s ease;
-}
-
-/* GRID BACKGROUND */
-.grid-bg {
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(var(--grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none; z-index: 0;
-}
-
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 16px 40px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(250,250,250,0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 2px solid var(--blue);
-}
-
-.nav-logo {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 14px;
-  color: var(--blue);
-  text-decoration: none;
-  letter-spacing: -1px;
-  display: flex; align-items: center; gap: 10px;
-}
-
-.nav-logo .p-icon {
-  width: 32px; height: 32px;
-  background: var(--blue);
-  display: grid; place-items: center;
-  font-size: 10px;
-  color: white;
-  image-rendering: pixelated;
-  clip-path: polygon(0 0,75% 0,75% 50%,50% 50%,50% 100%,0 100%);
-}
-
-.nav-links {
-  display: flex; gap: 32px; list-style: none;
-}
-.nav-links a {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  color: var(--black);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  position: relative;
-  padding-bottom: 2px;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0;
-  width: 0; height: 2px;
-  background: var(--blue);
-  transition: width 0.2s;
-}
-.nav-links a:hover::after { width: 100%; }
-
-.nav-cta {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
-  background: var(--blue);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  cursor: none;
-  text-decoration: none;
-  display: inline-block;
-  image-rendering: pixelated;
-  position: relative;
-  transition: transform 0.1s;
-  box-shadow: 4px 4px 0 var(--black);
-}
-.nav-cta:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
-.nav-cta:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--black); }
-
-/* HERO */
-.hero {
-  min-height: 100vh;
-  display: flex; align-items: center;
-  padding: 120px 40px 80px;
-  position: relative; z-index: 1;
-  overflow: hidden;
-}
-
-.hero-content { max-width: 700px; }
-
-.hero-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: var(--blue);
-  background: var(--blue-pale);
-  padding: 6px 14px;
-  display: inline-block;
-  margin-bottom: 24px;
-  letter-spacing: 0.1em;
-  border: 1px solid var(--blue);
-}
-
-.hero-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(28px, 5vw, 56px);
-  line-height: 1.4;
-  color: var(--black);
-  margin-bottom: 12px;
-}
-
-.hero-title span {
-  color: var(--blue);
-  position: relative;
-  display: inline-block;
-}
-
-.hero-title span::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0; right: 0;
-  height: 4px;
-  background: var(--yellow);
-  animation: scanline 2s linear infinite;
-}
-
-@keyframes scanline {
-  0% { transform: scaleX(0); transform-origin: left; }
-  50% { transform: scaleX(1); transform-origin: left; }
-  51% { transform: scaleX(1); transform-origin: right; }
-  100% { transform: scaleX(0); transform-origin: right; }
-}
-
-.hero-sub {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 12px;
-  color: var(--blue-light);
-  margin-bottom: 32px;
-  letter-spacing: 0.05em;
-}
-
-.hero-desc {
-  font-size: 18px;
-  line-height: 1.7;
-  color: #444;
-  margin-bottom: 48px;
-  max-width: 520px;
-}
-
-.hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
-
-.btn-primary {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
-  background: var(--blue);
-  color: white;
-  border: none;
-  padding: 18px 28px;
-  cursor: none;
-  text-decoration: none;
-  box-shadow: 5px 5px 0 var(--black);
-  transition: all 0.1s;
-  display: inline-block;
-}
-.btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--black); background: #0047DD; }
-
-.btn-outline {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  background: transparent;
-  color: var(--blue);
-  border: 2px solid var(--blue);
-  padding: 18px 28px;
-  cursor: none;
-  text-decoration: none;
-  box-shadow: 5px 5px 0 var(--blue-pale);
-  transition: all 0.1s;
-  display: inline-block;
-}
-.btn-outline:hover { background: var(--blue-pale); transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--blue-pale); }
-
-/* FLOATING PIXELS */
-.pixel-float {
-  position: absolute;
-  image-rendering: pixelated;
-  animation: floatPixel 6s ease-in-out infinite;
-  pointer-events: none;
-}
-@keyframes floatPixel {
-  0%,100% { transform: translateY(0) rotate(0deg); }
-  33% { transform: translateY(-20px) rotate(5deg); }
-  66% { transform: translateY(10px) rotate(-3deg); }
-}
-
-.px1 { width:20px;height:20px;background:var(--yellow);top:20%;right:15%;animation-delay:-1s; }
-.px2 { width:12px;height:12px;background:var(--cyan);top:35%;right:25%;animation-delay:-3s; }
-.px3 { width:32px;height:32px;background:var(--blue-pale);top:60%;right:10%;animation-delay:-2s; }
-.px4 { width:8px;height:8px;background:var(--blue);top:25%;right:40%;animation-delay:-4s; }
-.px5 { width:16px;height:16px;background:#FF6B6B;bottom:30%;right:30%;animation-delay:-0.5s; }
-
-.hero-pixel-art {
-  position: absolute;
-  right: 60px; top: 50%;
-  transform: translateY(-50%);
-  width: 280px;
-  opacity: 0.12;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 180px;
-  color: var(--blue);
-  line-height: 1;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* MARQUEE */
-.marquee-wrap {
-  background: var(--blue);
-  padding: 14px 0;
-  overflow: hidden;
-  position: relative; z-index: 1;
-  border-top: 3px solid var(--black);
-  border-bottom: 3px solid var(--black);
-}
-.marquee-track {
-  display: flex;
-  gap: 48px;
-  animation: marquee 20s linear infinite;
-  white-space: nowrap;
-}
-.marquee-track span {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  color: white;
-  flex-shrink: 0;
-}
-.marquee-track .dot {
-  color: var(--yellow);
-  margin: 0 8px;
-}
-@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-/* SECTIONS */
-section { position: relative; z-index: 1; }
-
-.section-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: var(--blue);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.section-label::before {
-  content: '';
-  width: 24px; height: 3px;
-  background: var(--blue);
-  display: inline-block;
-}
-
-.section-title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(18px, 3vw, 32px);
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-/* WHAT IS PIXELLON */
-.about {
-  padding: 100px 40px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.about-visual {
-  position: relative;
-}
-
-.about-big-p {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 200px;
-  color: var(--blue);
-  line-height: 1;
-  position: relative;
-  display: inline-block;
-}
-
-.about-big-p .face {
-  position: absolute;
-  top: 18%; left: 17%;
-  width: 52%; height: 52%;
-  background: white;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  border: 3px solid var(--black);
-}
-.about-big-p .face .eyes {
-  display: flex; gap: 14px;
-  margin-bottom: 10px;
-}
-.about-big-p .face .eyes span {
-  font-size: 24px;
-}
-.about-big-p .face .smile {
-  width: 40px; height: 20px;
-  border-bottom: 3px solid var(--black);
-  border-radius: 0 0 40px 40px;
-}
-
-.about-card {
-  background: white;
-  border: 2px solid var(--black);
-  padding: 28px;
-  margin-top: 20px;
-  box-shadow: 6px 6px 0 var(--blue-pale);
-  position: relative;
-}
-
-.about-card::before {
-  content: attr(data-num);
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
-  background: var(--yellow);
-  color: var(--black);
-  padding: 4px 8px;
-  position: absolute;
-  top: -14px; left: 16px;
-}
-
-.about-card h3 {
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--blue);
-}
-
-.about-card p {
-  font-size: 14px;
-  line-height: 1.6;
-  color: #555;
-}
-
-/* FEATURES */
-.features {
-  padding: 100px 40px;
-  background: var(--black);
-  overflow: hidden;
-}
-
-.features-inner {
-  max-width: 1200px; margin: 0 auto;
-}
-
-.features .section-label { color: var(--cyan); }
-.features .section-label::before { background: var(--cyan); }
-.features .section-title { color: white; }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  margin-top: 60px;
-  border: 2px solid #222;
-}
-
-.feat-card {
-  background: #111;
-  padding: 40px 32px;
-  border: 1px solid #222;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.2s;
-}
-
-.feat-card:hover {
-  background: #0057FF18;
-}
-
-.feat-card:hover .feat-num {
-  color: var(--blue);
-}
-
-.feat-num {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 42px;
-  color: #222;
-  margin-bottom: 20px;
-  transition: color 0.2s;
-  display: block;
-}
-
-.feat-icon {
-  font-size: 32px;
-  margin-bottom: 16px;
-  display: block;
-}
-
-.feat-card h3 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  color: white;
-  margin-bottom: 12px;
-  line-height: 1.6;
-}
-
-.feat-card p {
-  font-size: 14px;
-  line-height: 1.7;
-  color: #888;
-}
-
-.feat-card .feat-tag {
-  margin-top: 20px;
-  display: inline-block;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--cyan);
-  background: rgba(0,229,255,0.1);
-  padding: 4px 10px;
-  border: 1px solid rgba(0,229,255,0.2);
-}
-
-/* COMMUNITY FORUM HIGHLIGHT */
-.forum-section {
-  padding: 100px 40px;
-  max-width: 1200px; margin: 0 auto;
-}
-
-.forum-container {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 60px;
-  align-items: center;
-}
-
-.forum-mockup {
-  background: white;
-  border: 2px solid var(--black);
-  box-shadow: 8px 8px 0 var(--blue);
-  overflow: hidden;
-}
-
-.forum-bar {
-  background: var(--blue);
-  padding: 10px 16px;
-  display: flex; align-items: center; gap: 8px;
-}
-.forum-bar span {
-  width: 10px; height: 10px;
-  background: var(--yellow);
-  display: inline-block;
-  image-rendering: pixelated;
-}
-.forum-bar .title {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
-  color: white;
-  flex: 1;
-  text-align: center;
-}
-
-.forum-post {
-  padding: 20px;
-  border-bottom: 1px solid #eee;
-  transition: background 0.2s;
-}
-.forum-post:hover { background: #f5f8ff; }
-.forum-post:last-child { border-bottom: none; }
-
-.post-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 8px;
-}
-.post-avatar {
-  width: 28px; height: 28px;
-  background: var(--blue);
-  display: grid; place-items: center;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px; color: white;
-  flex-shrink: 0;
-}
-.post-meta { flex: 1; }
-.post-author {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; font-weight: 700;
-  color: var(--black);
-}
-.post-time {
-  font-size: 11px; color: #999;
-}
-.post-text {
-  font-size: 13px; line-height: 1.5; color: #444;
-  margin-bottom: 8px;
-}
-.post-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.post-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--blue);
-  background: var(--blue-pale);
-  padding: 2px 8px;
-}
-.post-reactions {
-  margin-top: 8px;
-  display: flex; gap: 12px;
-}
-.reaction {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; color: #888;
-  display: flex; align-items: center; gap: 4px;
-  cursor: none;
-}
-.reaction:hover { color: var(--blue); }
-
-/* WHO JOINS */
-.who {
-  padding: 80px 40px;
-  background: var(--yellow);
-  overflow: hidden;
-}
-.who-inner {
-  max-width: 1200px; margin: 0 auto;
-}
-.who .section-label { color: var(--black); }
-.who .section-label::before { background: var(--black); }
-.who .section-title { color: var(--black); }
-
-.who-cards {
-  display: flex; gap: 24px;
-  margin-top: 48px;
-  flex-wrap: wrap;
-}
-
-.who-card {
-  flex: 1; min-width: 200px;
-  background: white;
-  border: 2px solid var(--black);
-  padding: 32px 24px;
-  box-shadow: 5px 5px 0 var(--black);
-  text-align: center;
-  transition: transform 0.15s;
-}
-.who-card:hover { transform: translate(-4px,-4px); }
-
-.who-card .emoji { font-size: 40px; margin-bottom: 16px; display: block; }
-.who-card h3 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-.who-card p { font-size: 13px; color: #666; line-height: 1.5; }
-
-/* STATS */
-.stats {
-  padding: 80px 40px;
-  background: var(--blue);
-}
-.stats-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4,1fr);
-  gap: 2px;
-  border: 2px solid rgba(255,255,255,0.1);
-}
-.stat-item {
-  padding: 40px 24px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.stat-num {
-  font-family: 'Press Start 2P', monospace;
-  font-size: clamp(22px,3vw,36px);
-  color: var(--yellow);
-  margin-bottom: 12px;
-  display: block;
-}
-.stat-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: rgba(255,255,255,0.7);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-/* CTA */
-.cta-section {
-  padding: 120px 40px;
-  text-align: center;
-  position: relative; overflow: hidden;
-}
-
-.cta-section::before {
-  content: 'pixellon';
-  font-family: 'Press Start 2P', monospace;
-  font-size: 180px;
-  color: var(--blue-pale);
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  white-space: nowrap;
-  pointer-events: none;
-  letter-spacing: -10px;
-  user-select: none;
-}
-
-.cta-inner {
-  position: relative; z-index: 1;
-  max-width: 600px; margin: 0 auto;
-}
-
-.cta-inner .section-title {
-  font-size: clamp(22px,4vw,42px);
-  margin-bottom: 20px;
-}
-
-.cta-inner p {
-  font-size: 16px; color: #666;
-  margin-bottom: 40px; line-height: 1.6;
-}
-
-/* FOOTER */
-footer {
-  background: var(--black);
-  padding: 60px 40px;
-  border-top: 3px solid var(--blue);
-}
-.footer-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 60px;
-}
-.footer-brand .logo-text {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 16px;
-  color: var(--blue);
-  display: block; margin-bottom: 16px;
-}
-.footer-brand p {
-  font-size: 13px; color: #666;
-  line-height: 1.6; margin-bottom: 20px;
-}
-.footer-brand .tagline {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; color: var(--cyan);
-}
-.footer-col h4 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 10px; color: white;
-  margin-bottom: 20px;
-}
-.footer-col ul { list-style: none; }
-.footer-col ul li {
-  margin-bottom: 12px;
-}
-.footer-col ul li a {
-  font-size: 13px; color: #666;
-  text-decoration: none;
-  font-family: 'Space Mono', monospace;
-  transition: color 0.2s;
-}
-.footer-col ul li a:hover { color: var(--blue); }
-
-.footer-bottom {
-  max-width: 1200px; margin: 40px auto 0;
-  padding-top: 20px;
-  border-top: 1px solid #222;
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 12px;
-}
-.footer-bottom p {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px; color: #444;
-}
-.footer-bottom .made-with {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 8px; color: #333;
-}
-
-/* SCROLL ANIMATIONS */
-[data-animate] {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-[data-animate].visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-[data-animate="left"] { transform: translateX(-40px); }
-[data-animate="left"].visible { transform: translateX(0); }
-[data-animate="right"] { transform: translateX(40px); }
-[data-animate="right"].visible { transform: translateX(0); }
-
-/* HAMBURGER */
-.hamburger { display: none; }
-
-/* PIXEL BLINK */
-@keyframes blink {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-.blink { animation: blink 1s step-end infinite; }
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  nav { padding: 14px 20px; }
-  .nav-links { display: none; }
-  .hamburger {
-    display: flex; flex-direction: column; gap: 5px;
-    cursor: none; background: none; border: none;
-  }
-  .hamburger span { width: 24px; height: 2px; background: var(--black); display: block; }
-
-  .hero { padding: 100px 20px 60px; }
-  .hero-pixel-art { display: none; }
-  .px1,.px2,.px3,.px4,.px5 { display: none; }
-
-  .about {
-    grid-template-columns: 1fr;
-    gap: 40px; padding: 60px 20px;
-  }
-  .about-big-p { font-size: 120px; }
-
-  .features { padding: 60px 20px; }
-  .features-grid { grid-template-columns: 1fr; }
-
-  .forum-container { grid-template-columns: 1fr; padding: 60px 20px; }
-  .forum-section { padding: 60px 20px; }
-
-  .who { padding: 60px 20px; }
-  .who-cards { flex-direction: column; }
-
-  .stats-inner { grid-template-columns: 1fr 1fr; }
-
-  .cta-section { padding: 80px 20px; }
-  .cta-section::before { font-size: 60px; }
-
-  footer { padding: 40px 20px; }
-  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-  .footer-bottom { flex-direction: column; text-align: center; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixellon — Brewing Something...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #0057FF;
+      --blue-light: #4D8EFF;
+      --blue-pale: #C8DCFF;
+      --cyan: #00E5FF;
+      --yellow: #FFE600;
+      --red: #FF3B30;
+      --black: #0A0A0A;
+      --white: #FAFAFA;
+      --shadow: 8px 8px 0 var(--black);
+      --font-pixel: 'Press Start 2P', monospace;
+      --font-mono: 'Space Mono', monospace;
+      --font-sans: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-sans);
+    }
+
+    body {
+      cursor: none;
+      position: relative;
+    }
+
+    /* CUSTOM CURSORS */
+    .cursor {
+      width: 12px;
+      height: 12px;
+      background: var(--blue);
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s ease-out;
+      border: 1px solid white;
+    }
+
+    .cursor-trail {
+      width: 6px;
+      height: 6px;
+      background: var(--cyan);
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.1s ease-out;
+    }
+
+    /* BG & SCANLINES */
+    #bg-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .scanlines {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 87, 255, 0.04) 50%
+      );
+      background-size: 100% 4px;
+    }
+
+    /* HEADER */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+    }
+
+    .logo {
+      font-family: var(--font-pixel);
+      font-size: 16px;
+      color: var(--blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -1px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      color: white;
+      clip-path: polygon(0 0, 75% 0, 75% 50%, 50% 50%, 50% 100%, 0 100%);
+    }
+
+    .controls-panel {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .control-btn {
+      font-family: var(--font-pixel);
+      font-size: 10px;
+      padding: 10px 16px;
+      border: 2px solid var(--black);
+      background: white;
+      color: var(--black);
+      box-shadow: 4px 4px 0 var(--black);
+      cursor: none;
+      transition: all 0.1s;
+      outline: none;
+    }
+
+    .control-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--black);
+      background: var(--blue-pale);
+    }
+
+    .control-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--black);
+    }
+
+    .control-btn.active {
+      background: var(--blue);
+      color: white;
+    }
+
+    /* CENTRAL WINDOW CONSOLE */
+    .viewport-container {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 20px 40px;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .window {
+      width: 100%;
+      max-width: 650px;
+      background: var(--black);
+      border: 3px solid var(--black);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      pointer-events: auto;
+      z-index: 100;
+      position: relative;
+    }
+
+    .window-header {
+      background: var(--blue);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--black);
+      cursor: move;
+      user-select: none;
+    }
+
+    .window-title {
+      font-family: var(--font-pixel);
+      font-size: 10px;
+      color: white;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .window-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .win-dot {
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--black);
+      background: white;
+      cursor: none;
+    }
+
+    .win-dot.close { background: #FF6B6B; }
+    .win-dot.min { background: var(--yellow); }
+    .win-dot.max { background: var(--cyan); }
+
+    /* MENU TABS */
+    .tabs-bar {
+      display: flex;
+      background: #151515;
+      border-bottom: 3px solid var(--black);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      border-right: 3px solid var(--black);
+      padding: 12px 10px;
+      font-family: var(--font-pixel);
+      font-size: 9px;
+      color: #777;
+      cursor: none;
+      transition: all 0.2s;
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    .tab-btn:last-child {
+      border-right: none;
+    }
+
+    .tab-btn.active {
+      background: var(--black);
+      color: var(--cyan);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: #222;
+      color: white;
+    }
+
+    /* WINDOW BODY */
+    .window-body {
+      min-height: 380px;
+      max-height: 480px;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .tab-content.active {
+      display: flex;
+    }
+
+    /* TAB STATUS */
+    .status-lines {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      color: #888;
+      margin-bottom: 24px;
+      white-space: pre-wrap;
+    }
+
+    .status-line {
+      margin-bottom: 4px;
+    }
+
+    .status-line.highlight {
+      color: var(--yellow);
+      font-weight: bold;
+    }
+
+    .status-alert {
+      font-family: var(--font-pixel);
+      font-size: 16px;
+      line-height: 1.6;
+      color: white;
+      margin: 16px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .status-alert span {
+      color: var(--blue-light);
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* WAITLIST FORM */
+    .waitlist-container {
+      margin-top: auto;
+      border-top: 2px dashed #333;
+      padding-top: 20px;
+    }
+
+    .waitlist-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--cyan);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .waitlist-form {
+      display: flex;
+      gap: 12px;
+    }
+
+    .waitlist-input {
+      flex: 1;
+      background: #111;
+      border: 2px solid #333;
+      color: white;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .waitlist-input:focus {
+      border-color: var(--blue);
+    }
+
+    .waitlist-submit {
+      font-family: var(--font-pixel);
+      font-size: 9px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 0 24px;
+      cursor: none;
+      box-shadow: 4px 4px 0 var(--cyan);
+      transition: all 0.1s;
+    }
+
+    .waitlist-submit:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--cyan);
+    }
+
+    .waitlist-submit:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--cyan);
+    }
+
+    .feedback-msg {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      margin-top: 10px;
+      color: var(--yellow);
+    }
+
+    .progress-bar-container {
+      margin-top: 16px;
+      border: 2px solid #222;
+      padding: 3px;
+      height: 24px;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      width: 82%;
+      transition: width 1.5s ease-in-out;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      color: white;
+    }
+
+    /* TAB SYNTH */
+    .synth-header {
+      font-family: var(--font-pixel);
+      font-size: 9px;
+      color: #666;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .synth-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .synth-key {
+      background: #111;
+      border: 2px solid #333;
+      padding: 24px 10px;
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      color: white;
+      cursor: none;
+      transition: all 0.1s;
+      outline: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .synth-key span.key-label {
+      font-size: 12px;
+      color: var(--yellow);
+    }
+
+    .synth-key.active, .synth-key:active {
+      border-color: var(--cyan);
+      background: rgba(0, 229, 255, 0.1);
+      transform: scale(0.98);
+    }
+
+    .synth-key:nth-child(1) span.key-label { color: var(--cyan); }
+    .synth-key:nth-child(2) span.key-label { color: var(--yellow); }
+    .synth-key:nth-child(3) span.key-label { color: #FF6B6B; }
+    .synth-key:nth-child(4) span.key-label { color: var(--blue-light); }
+    .synth-key:nth-child(5) span.key-label { color: #00C853; }
+    .synth-key:nth-child(6) span.key-label { color: var(--white); }
+
+    .synth-visualizer {
+      height: 80px;
+      background: #000;
+      border: 2px solid #222;
+      position: relative;
+    }
+
+    .synth-visualizer canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* TAB GAME */
+    .game-layout {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .game-stats {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      color: #999;
+    }
+
+    .game-stats span.val {
+      color: var(--yellow);
+    }
+
+    .game-board-wrapper {
+      position: relative;
+      border: 3px solid var(--black);
+      box-shadow: 4px 4px 0 rgba(0, 87, 255, 0.2);
+    }
+
+    #game-canvas {
+      display: block;
+      background: #050505;
+      width: 300px;
+      height: 200px;
+    }
+
+    .game-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 16px;
+    }
+
+    .game-overlay h3 {
+      font-family: var(--font-pixel);
+      font-size: 14px;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+
+    .game-overlay p {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #bbb;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .game-overlay button {
+      font-family: var(--font-pixel);
+      font-size: 9px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      cursor: none;
+      outline: none;
+    }
+
+    .game-overlay button:hover {
+      background: #0047DD;
+    }
+
+    /* NEW: GAME CONTAINER AND SCOREBOARD STYLE */
+    .game-container {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .scoreboard-container {
+      flex: 1;
+      width: 100%;
+      max-width: 220px;
+      background: #111;
+      border: 2px solid #333;
+      padding: 16px;
+      font-family: var(--font-mono);
+      box-shadow: 4px 4px 0 rgba(0, 87, 255, 0.15);
+    }
+
+    .scoreboard-container h3 {
+      font-family: var(--font-pixel);
+      font-size: 8px;
+      color: var(--cyan);
+      margin-bottom: 12px;
+      text-align: center;
+      border-bottom: 2px dashed #333;
+      padding-bottom: 8px;
+    }
+
+    .scoreboard-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .scoreboard-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 8px;
+      font-family: var(--font-pixel);
+      color: #888;
+      padding: 6px 0;
+      border-bottom: 1px dashed #222;
+    }
+
+    .scoreboard-item:last-child {
+      border-bottom: none;
+    }
+
+    .scoreboard-item.rank-1 {
+      color: var(--yellow);
+      font-weight: bold;
+    }
+
+    .scoreboard-item.rank-2 {
+      color: var(--white);
+    }
+
+    .scoreboard-item.rank-3 {
+      color: var(--blue-light);
+    }
+
+    .scoreboard-name {
+      text-transform: uppercase;
+      margin-left: 8px;
+    }
+
+    /* GAME OVER SUBMIT SCORE FORM */
+    .score-submit-container {
+      margin-bottom: 8px;
+      width: 100%;
+    }
+
+    .score-form {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      width: 100%;
+      max-width: 220px;
+      margin: 0 auto;
+    }
+
+    .score-input {
+      width: 120px;
+      background: #111;
+      border: 2px solid #333;
+      color: white;
+      padding: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      outline: none;
+      text-align: center;
+      text-transform: uppercase;
+      transition: border-color 0.2s;
+    }
+
+    .score-input:focus {
+      border-color: var(--blue);
+    }
+
+    /* MOBILE D-PAD CONTROLS */
+    .mobile-controls {
+      display: none;
+      grid-template-columns: repeat(3, 40px);
+      grid-template-rows: repeat(3, 40px);
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .dpad-btn {
+      background: #1a1a1a;
+      border: 2px solid #333;
+      color: white;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: none;
+      user-select: none;
+      outline: none;
+    }
+
+    .dpad-btn:active {
+      background: var(--blue);
+    }
+
+    .dpad-btn.up { grid-column: 2; grid-row: 1; }
+    .dpad-btn.left { grid-column: 1; grid-row: 2; }
+    .dpad-btn.right { grid-column: 3; grid-row: 2; }
+    .dpad-btn.down { grid-column: 2; grid-row: 3; }
+
+    /* FOOTER */
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+    }
+
+    footer p {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #666;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--blue);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--cyan);
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      header {
+        padding: 16px 20px;
+      }
+      footer {
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+      .window-body {
+        min-height: 400px;
+        max-height: 440px;
+        padding: 16px;
+      }
+      .synth-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .synth-key {
+        padding: 16px 8px;
+      }
+      #game-canvas {
+        width: 260px;
+        height: 180px;
+      }
+      .mobile-controls {
+        display: grid;
+      }
+      .game-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .scoreboard-container {
+        width: 100%;
+        max-width: 300px;
+        margin-top: 16px;
+      }
+    }
+
+    /* BLINK ANIMATION */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .blink {
+      animation: blink 1s step-end infinite;
+    }
+  </style>
 </head>
 <body>
 
-<div class="grid-bg"></div>
-<div class="cursor" id="cursor"></div>
-<div class="cursor-trail" id="cursorTrail"></div>
+  <!-- BACKGROUND INTRACTIVE CANVAS -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="scanlines"></div>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <rect x="0" y="0" width="20" height="28" fill="#0057FF"/>
-      <rect x="20" y="0" width="12" height="16" fill="#0057FF"/>
-      <rect x="20" y="16" width="12" height="12" fill="none"/>
-      <rect x="4" y="4" width="20" height="20" fill="white"/>
-      <text x="5" y="20" font-family="monospace" font-size="14" fill="#0A0A0A">✦✦</text>
-      <rect x="24" y="20" width="8" height="8" fill="#0057FF"/>
-    </svg>
-    pixellon
-  </a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#features">Features</a></li>
-    <li><a href="#forum">Forum</a></li>
-    <li><a href="#join">Join</a></li>
-  </ul>
-  <a href="#join" class="nav-cta">JOIN US ▶</a>
-  <button class="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-pixel-art">P</div>
-  <div class="pixel-float px1"></div>
-  <div class="pixel-float px2"></div>
-  <div class="pixel-float px3"></div>
-  <div class="pixel-float px4"></div>
-  <div class="pixel-float px5"></div>
-
-  <div class="hero-content">
-    <div class="hero-tag" data-animate>✦ COMMUNITY PLATFORM</div>
-    <h1 class="hero-title" data-animate>
-      ALL TALENTS,<br><span>ONE VIBE<span class="blink">_</span></span>
-    </h1>
-    <p class="hero-sub" data-animate>★ Introducing Pixellon ★</p>
-    <p class="hero-desc" data-animate>
-      A collaborative learning & knowledge-sharing community where students, creators, and professionals come together. Learn, create, showcase — and share your <em>real</em> educational journey.
-    </p>
-    <div class="hero-btns" data-animate>
-      <a href="#join" class="btn-primary">JOIN THE COMMUNITY ▶</a>
-      <a href="#features" class="btn-outline">EXPLORE →</a>
+  <!-- HEADER BRANDING -->
+  <header>
+    <a href="#" class="logo">
+      <div class="logo-icon">✦✦</div>
+      pixellon
+    </a>
+    <div class="controls-panel">
+      <button class="control-btn" id="music-toggle" onclick="toggleMusicBeat()">MUSIC: OFF</button>
+      <button class="control-btn" id="sound-toggle" onclick="toggleSoundFx()">SOUND: ON</button>
     </div>
-  </div>
-</section>
+  </header>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <span>LEARN <span class="dot">★</span></span>
-    <span>CREATE <span class="dot">★</span></span>
-    <span>SHOWCASE <span class="dot">★</span></span>
-    <span>CONNECT <span class="dot">★</span></span>
-    <span>GROW <span class="dot">★</span></span>
-    <span>SHARE YOUR JOURNEY <span class="dot">★</span></span>
-    <span>ALL TALENTS ONE VIBE <span class="dot">★</span></span>
-    <span>LEARN <span class="dot">★</span></span>
-    <span>CREATE <span class="dot">★</span></span>
-    <span>SHOWCASE <span class="dot">★</span></span>
-    <span>CONNECT <span class="dot">★</span></span>
-    <span>GROW <span class="dot">★</span></span>
-    <span>SHARE YOUR JOURNEY <span class="dot">★</span></span>
-    <span>ALL TALENTS ONE VIBE <span class="dot">★</span></span>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about">
-    <div class="about-visual" data-animate="left">
-      <div class="about-big-p">
-        P
-        <div class="face">
-          <div class="eyes"><span>✦</span><span>✦</span></div>
-          <div class="smile"></div>
+  <!-- CENTRAL OPERATIVE CONSOLE -->
+  <div class="viewport-container">
+    <div class="window" id="app-window">
+      <!-- HEADER -->
+      <div class="window-header" id="window-header">
+        <div class="window-title">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <rect x="2" y="2" width="12" height="12" fill="var(--cyan)" />
+          </svg>
+          pixellon_deck_v1.0.3.sys
+        </div>
+        <div class="window-actions">
+          <div class="win-dot min" onclick="minimizeWindow()"></div>
+          <div class="win-dot max" onclick="maximizeWindow()"></div>
+          <div class="win-dot close" onclick="resetWindow()"></div>
         </div>
       </div>
-    </div>
-    <div data-animate="right">
-      <div class="section-label">What is Pixellon</div>
-      <h2 class="section-title">MORE THAN A<br>PLATFORM.</h2>
-      <p style="font-size:16px;line-height:1.8;color:#555;margin-bottom:32px;">
-        Pixellon is where your real educational journey gets heard. Not just another course site — a living, breathing community where people do <em>anything</em> together.
-      </p>
 
-      <div class="about-card" data-num="01">
-        <h3>🎓 For College Students & Beyond</h3>
-        <p>Build final year projects, learn AI/ML, get mentored — all in one place. From beginners to professionals.</p>
-      </div>
-      <div class="about-card" data-num="02" style="margin-top:16px;">
-        <h3>💬 Honest Reviews, Real Voices</h3>
-        <p>Our community forum is different. Share genuine reviews of your educational journey — what worked, what didn't.</p>
-      </div>
-      <div class="about-card" data-num="03" style="margin-top:16px;">
-        <h3>🚀 Showcase Your Work</h3>
-        <p>Got a project? A skill? Show it off. Pixellon celebrates every talent, big or small.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features" id="features">
-  <div class="features-inner">
-    <div class="section-label" data-animate>What We Offer</div>
-    <h2 class="section-title" data-animate>EVERYTHING YOU<br>NEED TO THRIVE.</h2>
-    <div class="features-grid">
-      <div class="feat-card" data-animate>
-        <span class="feat-num">01</span>
-        <span class="feat-icon">🧠</span>
-        <h3>COLLABORATIVE LEARNING</h3>
-        <p>Learn together. Share notes, resources, project ideas, and breakthroughs in real time with people on the same journey.</p>
-        <span class="feat-tag">COMMUNITY-FIRST</span>
-      </div>
-      <div class="feat-card" data-animate>
-        <span class="feat-num">02</span>
-        <span class="feat-icon">💬</span>
-        <h3>COMMUNITY FORUM</h3>
-        <p>Post genuine reviews of courses, colleges, and learning paths. Help others make informed decisions with your real experience.</p>
-        <span class="feat-tag">HONEST REVIEWS</span>
-      </div>
-      <div class="feat-card" data-animate>
-        <span class="feat-num">03</span>
-        <span class="feat-icon">🎯</span>
-        <h3>TALENT SHOWCASE</h3>
-        <p>Present your projects, skills, artwork, code — anything you've built. Get feedback and recognition from the community.</p>
-        <span class="feat-tag">ALL TALENTS</span>
-      </div>
-      <div class="feat-card" data-animate>
-        <span class="feat-num">04</span>
-        <span class="feat-icon">🏆</span>
-        <h3>EVENTS & CHALLENGES</h3>
-        <p>Hackathons, design sprints, quiz competitions — participate and win. Challenges designed to push and grow your skills.</p>
-        <span class="feat-tag">COMPETE & WIN</span>
-      </div>
-      <div class="feat-card" data-animate>
-        <span class="feat-num">05</span>
-        <span class="feat-icon">🤝</span>
-        <h3>MENTORSHIP NETWORK</h3>
-        <p>Connect with seniors, professionals, and domain experts. Get 1:1 guidance on projects, careers, and learning paths.</p>
-        <span class="feat-tag">GROW TOGETHER</span>
-      </div>
-      <div class="feat-card" data-animate>
-        <span class="feat-num">06</span>
-        <span class="feat-icon">🛠️</span>
-        <h3>AI/ML PROJECT HUB</h3>
-        <p>Ready-to-use project templates, source code, PPTs. Step-by-step guidance with industry-grade, review-ready deliverables.</p>
-        <span class="feat-tag">BUILD REAL THINGS</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FORUM HIGHLIGHT -->
-<section id="forum" class="forum-section">
-  <div class="forum-container">
-    <div data-animate="left">
-      <div class="section-label">Community Forum</div>
-      <h2 class="section-title">THE FORUM<br>THAT'S<br>DIFFERENT.</h2>
-      <p style="font-size:16px;line-height:1.8;color:#555;margin-bottom:24px;">
-        Every other platform hides the real story. On Pixellon, you share <strong>genuine reviews</strong> of your educational journey — the good, the bad, and everything in between.
-      </p>
-      <p style="font-size:14px;color:#888;line-height:1.7;margin-bottom:32px;">
-        Was that course worth it? Did your college actually teach you anything? What project actually got you placed? Real answers from real people.
-      </p>
-      <a href="#join" class="btn-primary">EXPLORE THE FORUM ▶</a>
-    </div>
-    <div class="forum-mockup" data-animate="right">
-      <div class="forum-bar">
-        <span></span><span style="background:#FF6B6B"></span><span style="background:#00E5FF"></span>
-        <span class="title">pixellon / community-forum</span>
+      <!-- TABS BAR -->
+      <div class="tabs-bar">
+        <button class="tab-btn active" onclick="switchTab('status')">💻 STATUS</button>
+        <button class="tab-btn" onclick="switchTab('synth')">🎹 SYNTH BOARD</button>
+        <button class="tab-btn" onclick="switchTab('game')">🎮 ARCADE GAME</button>
       </div>
 
-      <div class="forum-post">
-        <div class="post-header">
-          <div class="post-avatar">A</div>
-          <div class="post-meta">
-            <div class="post-author">@arjun_dev</div>
-            <div class="post-time">2 hours ago</div>
+      <!-- WINDOW BODY -->
+      <div class="window-body">
+        
+        <!-- TAB 1: STATUS -->
+        <div class="tab-content active" id="tab-status">
+          <div class="status-lines" id="terminal-lines"></div>
+          
+          <h1 class="status-alert">
+            PIXELLON IS BREWING SOMETHING.
+            <span>WILL BE ON TRACK SOON.</span>
+          </h1>
+
+          <div class="progress-bar-container">
+            <div class="progress-fill" id="brew-progress"></div>
+            <div class="progress-text" id="brew-text">BREWING PROGRESS: 84%</div>
+          </div>
+
+          <div class="waitlist-container">
+            <p class="waitlist-tag">// JOIN THE VIP GRID FOR PRIORITY ACCESS</p>
+            <form class="waitlist-form" onsubmit="submitWaitlist(event)">
+              <input type="email" class="waitlist-input" id="waitlist-email" placeholder="ENTER EMAIL ADDRESS..." required autocomplete="off">
+              <button type="submit" class="waitlist-submit">SUBSCRIBE</button>
+            </form>
+            <div class="feedback-msg" id="form-feedback"></div>
           </div>
         </div>
-        <div class="post-text">Honestly, the AI/ML course at XYZ was overhyped. Pixellon's project hub helped me build something that actually got me an interview! Here's what worked 👇</div>
-        <div class="post-tags">
-          <span class="post-tag">ai/ml</span>
-          <span class="post-tag">review</span>
-          <span class="post-tag">placement</span>
-        </div>
-        <div class="post-reactions">
-          <span class="reaction">💙 48</span>
-          <span class="reaction">💬 12 replies</span>
-        </div>
-      </div>
 
-      <div class="forum-post">
-        <div class="post-header">
-          <div class="post-avatar" style="background:#FF6B6B">P</div>
-          <div class="post-meta">
-            <div class="post-author">@priya_creates</div>
-            <div class="post-time">5 hours ago</div>
+        <!-- TAB 2: SYNTH -->
+        <div class="tab-content" id="tab-synth">
+          <p class="synth-header">// PRESS KEYS OR USE MOUSE CLICK TO SYNTHESIZE RETRO AUDIO TONES. MOVE YOUR CURSOR TO DRIFT PARTICLES.</p>
+          <div class="synth-grid">
+            <button class="synth-key" onclick="triggerSynth(261.63, 'square', 'COIN', 0)">
+              <span class="key-label">✦</span>
+              <span>C4<br>(COIN)</span>
+            </button>
+            <button class="synth-key" onclick="triggerSynth(293.66, 'sawtooth', 'LASER', 1)">
+              <span class="key-label">★</span>
+              <span>D4<br>(LASER)</span>
+            </button>
+            <button class="synth-key" onclick="triggerSynth(329.63, 'triangle', 'WARP', 2)">
+              <span class="key-label">▲</span>
+              <span>E4<br>(WARP)</span>
+            </button>
+            <button class="synth-key" onclick="triggerSynth(392.00, 'square', 'JUMP', 3)">
+              <span class="key-label">●</span>
+              <span>G4<br>(JUMP)</span>
+            </button>
+            <button class="synth-key" onclick="triggerSynth(440.00, 'sawtooth', 'ZAP', 4)">
+              <span class="key-label">♦</span>
+              <span>A4<br>(ZAP)</span>
+            </button>
+            <button class="synth-key" onclick="triggerSynth(523.25, 'sine', 'POWER', 5)">
+              <span class="key-label">✦</span>
+              <span>C5<br>(POWER)</span>
+            </button>
+          </div>
+          <div class="synth-visualizer">
+            <canvas id="synth-canvas"></canvas>
           </div>
         </div>
-        <div class="post-text">Submitted my final year project via Pixellon mentors. Got 100% academic compliance AND it's actually deployed! Best decision of my CS journey 🚀</div>
-        <div class="post-tags">
-          <span class="post-tag">final-year</span>
-          <span class="post-tag">project</span>
-        </div>
-        <div class="post-reactions">
-          <span class="reaction">💙 91</span>
-          <span class="reaction">💬 7 replies</span>
-        </div>
-      </div>
 
-      <div class="forum-post">
-        <div class="post-header">
-          <div class="post-avatar" style="background:#00C853">R</div>
-          <div class="post-meta">
-            <div class="post-author">@rahul_pixels</div>
-            <div class="post-time">1 day ago</div>
+        <!-- TAB 3: ARCADE GAME -->
+        <div class="tab-content" id="tab-game">
+          <div class="game-container">
+            <div class="game-layout">
+              <div class="game-stats">
+                <span>SCORE: <span class="val" id="current-score">000</span></span>
+                <span>HIGH SCORE: <span class="val" id="high-score">000</span></span>
+              </div>
+              
+              <div class="game-board-wrapper">
+                <canvas id="game-canvas"></canvas>
+                
+                <!-- OVERLAY -->
+                <div class="game-overlay" id="game-overlay">
+                  <!-- Start Screen -->
+                  <div id="game-start-screen" style="width: 100%;">
+                    <h3>PIXEL SNAKE</h3>
+                    <p>Use Arrow Keys to control the pixel grid snake. Eat red pixels to build energy. Avoid crashing into walls or yourself.</p>
+                    <button onclick="startGame()">START GAME ▶</button>
+                  </div>
+
+                  <!-- Game Over Screen -->
+                  <div id="game-over-screen" style="display: none; width: 100%;">
+                    <h3 style="margin-bottom: 8px;">GAME OVER</h3>
+                    <p id="game-over-text" style="font-size: 10px; margin-bottom: 8px;"></p>
+                    
+                    <div id="score-submit-container" class="score-submit-container">
+                      <p style="font-size: 8px; color: var(--cyan); margin-bottom: 6px; font-family: var(--font-pixel);">// NEW TOP SCORE! SAVE NAME</p>
+                      <form id="score-form" class="score-form" onsubmit="submitScore(event)">
+                        <input type="text" id="player-name" class="score-input" placeholder="YOUR NAME" maxlength="8" required autocomplete="off">
+                        <button type="submit" style="font-family: var(--font-pixel); font-size: 8px; background: var(--blue); color: white; border: none; padding: 6px 12px; cursor: none;">SAVE</button>
+                      </form>
+                    </div>
+                    
+                    <button id="restart-btn" onclick="startGame()" style="font-size: 8px; padding: 8px 16px;">PLAY AGAIN ↻</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- MOBILE BUTTONS -->
+              <div class="mobile-controls">
+                <button class="dpad-btn up" onclick="handleDpad('up')">▲</button>
+                <button class="dpad-btn left" onclick="handleDpad('left')">◀</button>
+                <button class="dpad-btn right" onclick="handleDpad('right')">▶</button>
+                <button class="dpad-btn down" onclick="handleDpad('down')">▼</button>
+              </div>
+            </div>
+
+            <!-- LEADERBOARD / SCOREBOARD -->
+            <div class="scoreboard-container">
+              <h3>🏆 TOP SCORES</h3>
+              <ul class="scoreboard-list" id="leaderboard-list">
+                <!-- Scores loaded via Javascript -->
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="post-text">Won the hackathon challenge this week! The prep resources here are actually better than Udemy for real problems. No cap 🏆</div>
-        <div class="post-tags">
-          <span class="post-tag">hackathon</span>
-          <span class="post-tag">win</span>
-        </div>
-        <div class="post-reactions">
-          <span class="reaction">💙 134</span>
-          <span class="reaction">💬 23 replies</span>
-        </div>
+
       </div>
     </div>
   </div>
-</section>
 
-<!-- WHO JOINS -->
-<section class="who">
-  <div class="who-inner">
-    <div class="section-label" data-animate>Who Is It For</div>
-    <h2 class="section-title" data-animate>EVERYONE IS<br>WELCOME.</h2>
-    <div class="who-cards">
-      <div class="who-card" data-animate>
-        <span class="emoji">🎓</span>
-        <h3>STUDENTS</h3>
-        <p>College students building projects, prepping for placements, and finding their path in tech.</p>
-      </div>
-      <div class="who-card" data-animate>
-        <span class="emoji">💼</span>
-        <h3>PROFESSIONALS</h3>
-        <p>Working folks who want to upskill, mentor juniors, and give back to the community.</p>
-      </div>
-      <div class="who-card" data-animate>
-        <span class="emoji">🎨</span>
-        <h3>CREATORS</h3>
-        <p>Designers, writers, artists, makers — every talent has a home on Pixellon.</p>
-      </div>
-      <div class="who-card" data-animate>
-        <span class="emoji">🔬</span>
-        <h3>RESEARCHERS</h3>
-        <p>Those pushing boundaries in AI, data science, and emerging tech fields.</p>
-      </div>
+  <!-- FOOTER SOCIALS -->
+  <footer>
+    <p>© 2026 Pixellon.inc — All talents, one vibe!</p>
+    <div class="footer-links">
+      <a href="https://forms.gle/86DD1rVPpXpnaoSd7" target="_blank">// Enquiry Form</a>
+      <a href="mailto:pixellon.work@gmail.com">// Email</a>
+      <a href="#">// Instagram</a>
+      <a href="#">// LinkedIn</a>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stats-inner">
-    <div class="stat-item" data-animate>
-      <span class="stat-num">500+</span>
-      <span class="stat-label">Members & Growing</span>
-    </div>
-    <div class="stat-item" data-animate>
-      <span class="stat-num">50+</span>
-      <span class="stat-label">Projects Completed</span>
-    </div>
-    <div class="stat-item" data-animate>
-      <span class="stat-num">∞</span>
-      <span class="stat-label">Talents Welcome</span>
-    </div>
-    <div class="stat-item" data-animate>
-      <span class="stat-num">1</span>
-      <span class="stat-label">Community. One Vibe.</span>
-    </div>
-  </div>
-</div>
+  <!-- CUSTOM CURSOR DOM -->
+  <div class="cursor" id="custom-cursor"></div>
+  <div class="cursor-trail" id="cursor-trail"></div>
 
-<!-- CTA -->
-<section class="cta-section" id="join">
-  <div class="cta-inner">
-    <div class="section-label" style="justify-content:center" data-animate>Ready?</div>
-    <h2 class="section-title" data-animate>JOIN THE VIBE.<br>IT'S FREE.</h2>
-    <p data-animate>
-      Stop scrolling. Start building. Pixellon is where your real journey begins — with people who actually get it.
-    </p>
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" data-animate>
-      <a href="https://forms.gle/86DD1rVPpXpnaoSd7" target="_blank" class="btn-primary">JOIN NOW — IT'S FREE ▶</a>
-      <a href="mailto:pixellon.work@gmail.com" class="btn-outline">MAIL US →</a>
-    </div>
-    <p style="margin-top:24px;font-family:'Space Mono',monospace;font-size:11px;color:#aaa;" data-animate>
-      pixellon.work@gmail.com
-    </p>
-  </div>
-</section>
+  <!-- SCRIPTS & ENGINE -->
+  <script>
+    // -------------------------------------------------------------------------
+    // 1. GLOBAL STATE & THEME SETUP
+    // -------------------------------------------------------------------------
+    let soundEnabled = true;
+    let audioCtx = null;
+    let musicInterval = null;
+    let musicPlaying = false;
+    let currentToneOsc = null;
+    let synthCanvas, synthCtx;
+    let isMinimized = false;
+    let isMaximized = false;
+    
+    // Custom cursor variables
+    const cursor = document.getElementById('custom-cursor');
+    const trail = document.getElementById('cursor-trail');
+    let mx = 0, my = 0, tx = 0, ty = 0;
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <span class="logo-text">pixellon</span>
-      <p>A collaborative learning & knowledge-sharing community where all talents thrive together.</p>
-      <span class="tagline">// All talents, one vibe!</span>
-    </div>
-    <div class="footer-col">
-      <h4>PLATFORM</h4>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#forum">Community Forum</a></li>
-        <li><a href="#join">Join Now</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>CONTACT</h4>
-      <ul>
-        <li><a href="mailto:pixellon.work@gmail.com">Email Us</a></li>
-        <li><a href="https://forms.gle/86DD1rVPpXpnaoSd7">Enquiry Form</a></li>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">LinkedIn</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2025 Pixellon.inc — All talents, one vibe!</p>
-    <span class="made-with">MADE WITH ♥ BY PIXELLON TEAM</span>
-  </div>
-</footer>
-
-<script>
-// Cursor
-const cursor = document.getElementById('cursor');
-const trail = document.getElementById('cursorTrail');
-let mx = 0, my = 0, tx = 0, ty = 0;
-
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx - 6 + 'px';
-  cursor.style.top = my - 6 + 'px';
-});
-
-setInterval(() => {
-  tx += (mx - tx) * 0.15;
-  ty += (my - ty) * 0.15;
-  trail.style.left = tx - 3 + 'px';
-  trail.style.top = ty - 3 + 'px';
-}, 16);
-
-document.querySelectorAll('a,button').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.style.transform = 'scale(2.5)');
-  el.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
-});
-
-// Scroll animations
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); }
-  });
-}, { threshold: 0.15 });
-
-document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el));
-
-// Stagger children
-document.querySelectorAll('.features-grid,.who-cards,.stats-inner').forEach(parent => {
-  Array.from(parent.children).forEach((child, i) => {
-    if (!child.hasAttribute('data-animate')) {
-      child.setAttribute('data-animate','');
-      child.style.transitionDelay = (i * 0.1) + 's';
-      obs.observe(child);
+    // Detect touch device
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouchDevice) {
+      cursor.style.display = 'none';
+      trail.style.display = 'none';
+      document.body.style.cursor = 'auto';
     } else {
-      child.style.transitionDelay = (i * 0.1) + 's';
-    }
-  });
-});
-
-// Counter animation
-function animateCount(el, target, suffix = '') {
-  let start = 0;
-  const dur = 1500;
-  const step = (timestamp) => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / dur, 1);
-    const val = Math.floor(progress * target);
-    el.textContent = val + suffix;
-    if (progress < 1) requestAnimationFrame(step);
-    else el.textContent = target + suffix;
-  };
-  requestAnimationFrame(step);
-}
-
-const statsObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const nums = e.target.querySelectorAll('.stat-num');
-      nums.forEach(n => {
-        const txt = n.textContent;
-        if (txt === '∞' || txt === '1') return;
-        const num = parseInt(txt);
-        const suf = txt.includes('+') ? '+' : '';
-        animateCount(n, num, suf);
+      document.body.style.cursor = 'none';
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX;
+        my = e.clientY;
+        cursor.style.left = mx + 'px';
+        cursor.style.top = my + 'px';
       });
-      statsObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.5 });
 
-const statsEl = document.querySelector('.stats');
-if (statsEl) statsObs.observe(statsEl);
-</script>
+      setInterval(() => {
+        tx += (mx - tx) * 0.15;
+        ty += (my - ty) * 0.15;
+        trail.style.left = tx + 'px';
+        trail.style.top = ty + 'px';
+      }, 16);
+
+      // Interactive cursor scaling
+      document.querySelectorAll('a, button, .synth-key, .win-dot, input').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.style.transform = 'translate(-50%, -50%) scale(1.8)');
+        el.addEventListener('mouseleave', () => cursor.style.transform = 'translate(-50%, -50%) scale(1)');
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. CANVAS INTERACTIVE BACKGROUND GRID
+    // -------------------------------------------------------------------------
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let points = [];
+    const spacing = 45;
+    const bgMouse = { x: -1000, y: -1000, active: false };
+    const ripples = [];
+    const particles = [];
+
+    function initCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      points = [];
+      for (let x = 0; x < width + spacing; x += spacing) {
+        for (let y = 0; y < height + spacing; y += spacing) {
+          points.push({
+            ox: x,
+            oy: y,
+            x: x,
+            y: y,
+            vx: 0,
+            vy: 0
+          });
+        }
+      }
+    }
+
+    class Particle {
+      constructor(x, y, color = null) {
+        this.x = x;
+        this.y = y;
+        this.size = Math.random() * 8 + 4;
+        const colors = ['#0057FF', '#00E5FF', '#FFE600'];
+        this.color = color || colors[Math.floor(Math.random() * colors.length)];
+        this.vx = (Math.random() - 0.5) * 6;
+        this.vy = (Math.random() - 0.5) * 6 - 2; // float up
+        this.alpha = 1.0;
+        this.decay = Math.random() * 0.015 + 0.008;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
+        ctx.restore();
+      }
+    }
+
+    class Ripple {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.r = 0;
+        this.maxR = Math.max(width, height) * 0.45;
+        this.speed = 8;
+        this.alpha = 1.0;
+      }
+      update() {
+        this.r += this.speed;
+        this.alpha = 1.0 - (this.r / this.maxR);
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha * 0.15;
+        ctx.strokeStyle = '#0057FF';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    window.addEventListener('resize', initCanvas);
+    document.addEventListener('mousemove', e => {
+      bgMouse.x = e.clientX;
+      bgMouse.y = e.clientY;
+      bgMouse.active = true;
+
+      // Spawn subtle mouse particles occasionally
+      if (Math.random() < 0.15) {
+        particles.push(new Particle(bgMouse.x, bgMouse.y));
+      }
+    });
+
+    document.addEventListener('click', e => {
+      // Don't trigger ripples if clicking interactive console windows
+      if (e.target.closest('.window') || e.target.closest('header') || e.target.closest('footer')) return;
+      
+      ripples.push(new Ripple(e.clientX, e.clientY));
+      
+      // Spawn pixel explosion
+      for (let i = 0; i < 15; i++) {
+        particles.push(new Particle(e.clientX, e.clientY));
+      }
+      
+      playSynthTone(180, 'sine', 0.15, 60);
+    });
+
+    function spawnExplosion(x, y, count = 40, color = null) {
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle(x, y, color));
+      }
+    }
+
+    function animateBg() {
+      ctx.fillStyle = '#FAFAFA';
+      ctx.fillRect(0, 0, width, height);
+
+      // Grid physics update
+      points.forEach(p => {
+        let dx = bgMouse.x - p.ox;
+        let dy = bgMouse.y - p.oy;
+        let dist = Math.hypot(dx, dy);
+        
+        let warpForce = 0;
+        if (dist < 220) {
+          warpForce = (220 - dist) / 220; // 0 to 1 scaling
+        }
+
+        let rippleX = 0;
+        let rippleY = 0;
+        ripples.forEach(r => {
+          let rdist = Math.hypot(p.ox - r.x, p.oy - r.y);
+          let diff = Math.abs(rdist - r.r);
+          if (diff < 60) {
+            let strength = (60 - diff) / 60 * r.alpha * 45;
+            let angle = Math.atan2(p.oy - r.y, p.ox - r.x);
+            rippleX += Math.cos(angle) * strength;
+            rippleY += Math.sin(angle) * strength;
+          }
+        });
+
+        // Calculate target location (warped location + ripple)
+        let targetX = p.ox - (dx / (dist + 0.1)) * warpForce * 55 + rippleX;
+        let targetY = p.oy - (dy / (dist + 0.1)) * warpForce * 55 + rippleY;
+
+        // Spring mechanics
+        p.vx += (targetX - p.x) * 0.09;
+        p.vy += (targetY - p.y) * 0.09;
+        p.vx *= 0.78;
+        p.vy *= 0.78;
+        p.x += p.vx;
+        p.y += p.vy;
+      });
+
+      // Draw Grid Dots
+      points.forEach(p => {
+        ctx.fillStyle = 'rgba(0, 87, 255, 0.09)';
+        ctx.fillRect(p.x - 1, p.y - 1, 3, 3);
+      });
+
+      // Draw active lines pointing toward mouse (subtle visual impact)
+      points.forEach(p => {
+        let dx = bgMouse.x - p.x;
+        let dy = bgMouse.y - p.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist < 120) {
+          ctx.strokeStyle = `rgba(0, 229, 255, ${0.15 * (1 - dist / 120)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x + (dx / dist) * 12, p.y + (dy / dist) * 12);
+          ctx.stroke();
+        }
+      });
+
+      // Update & Draw Ripples
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].update();
+        ripples[i].draw();
+        if (ripples[i].alpha <= 0) ripples.splice(i, 1);
+      }
+
+      // Update & Draw Particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].alpha <= 0) particles.splice(i, 1);
+      }
+
+      requestAnimationFrame(animateBg);
+    }
+
+    initCanvas();
+    animateBg();
+
+    // -------------------------------------------------------------------------
+    // 3. WEB AUDIO 8-BIT SYNTH ENGINE
+    // -------------------------------------------------------------------------
+    function initAudio() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    function playSynthTone(freq, type = 'sine', duration = 0.2, slideToFreq = null) {
+      if (!soundEnabled) return;
+      initAudio();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      if (slideToFreq !== null) {
+        osc.frequency.exponentialRampToValueAtTime(slideToFreq, audioCtx.currentTime + duration);
+      }
+
+      gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+      
+      // Store current osc for visualizer drawing
+      currentToneOsc = { freq, type, time: Date.now(), duration };
+    }
+
+    // Sound Presets
+    const sounds = {
+      click: () => playSynthTone(750, 'triangle', 0.05),
+      coin: () => {
+        playSynthTone(523.25, 'square', 0.08);
+        setTimeout(() => playSynthTone(659.25, 'square', 0.16), 80);
+      },
+      laser: () => playSynthTone(880, 'sawtooth', 0.22, 110),
+      warp: () => playSynthTone(330, 'triangle', 0.35, 880),
+      jump: () => playSynthTone(150, 'square', 0.15, 600),
+      zap: () => {
+        playSynthTone(900, 'sawtooth', 0.05);
+        setTimeout(() => playSynthTone(700, 'sawtooth', 0.05), 40);
+        setTimeout(() => playSynthTone(500, 'sawtooth', 0.05), 80);
+      },
+      powerUp: () => {
+        playSynthTone(220, 'sine', 0.1, 440);
+        setTimeout(() => playSynthTone(440, 'sine', 0.1, 880), 90);
+        setTimeout(() => playSynthTone(880, 'sine', 0.2, 1760), 180);
+      },
+      explosion: () => playSynthTone(240, 'sawtooth', 0.45, 20)
+    };
+
+    function toggleSoundFx() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-toggle').textContent = `SOUND: ${soundEnabled ? 'ON' : 'OFF'}`;
+      document.getElementById('sound-toggle').classList.toggle('active', !soundEnabled);
+      if (!soundEnabled) {
+        stopMelodyBeat();
+      }
+    }
+
+    // 8-Bit Generative Background Track Arpeggiator
+    const melodyScale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // pentatonic notes
+    const beatSequence = [0, 2, 4, 3, 2, 4, 5, 4, 1, 3, 2, 0, 4, 5, 2, 3];
+    let beatStep = 0;
+
+    function toggleMusicBeat() {
+      initAudio();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      if (musicPlaying) {
+        stopMelodyBeat();
+      } else {
+        musicPlaying = true;
+        document.getElementById('music-toggle').textContent = 'MUSIC: ON';
+        document.getElementById('music-toggle').classList.add('active');
+        
+        musicInterval = setInterval(() => {
+          if (!soundEnabled) return;
+          const noteIndex = beatSequence[beatStep % beatSequence.length];
+          const freq = melodyScale[noteIndex];
+
+          // Play melody synth block
+          playBeatSynthNote(freq, 'triangle', 0.12);
+
+          // Render kick
+          if (beatStep % 4 === 0) {
+            playBeatSynthNote(75, 'sawtooth', 0.15);
+          }
+          // Render tick/snare hi-hat
+          if (beatStep % 4 === 2) {
+            playBeatSynthNote(1200, 'sine', 0.03);
+          }
+
+          beatStep++;
+        }, 160);
+      }
+    }
+
+    function stopMelodyBeat() {
+      musicPlaying = false;
+      document.getElementById('music-toggle').textContent = 'MUSIC: OFF';
+      document.getElementById('music-toggle').classList.remove('active');
+      if (musicInterval) {
+        clearInterval(musicInterval);
+        musicInterval = null;
+      }
+    }
+
+    function playBeatSynthNote(freq, type, duration) {
+      if (!soundEnabled || !audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.015, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    // -------------------------------------------------------------------------
+    // 4. INTERACTIVE DECK CONSOLE CONTROL
+    // -------------------------------------------------------------------------
+    const appWindow = document.getElementById('app-window');
+    const windowHeader = document.getElementById('window-header');
+    
+    // Draggable window implementation
+    let isDragging = false;
+    let dragStartX = 0, dragStartY = 0;
+    let windowLeft = 0, windowTop = 0;
+
+    windowHeader.addEventListener('mousedown', e => {
+      if (e.target.closest('.window-actions')) return;
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      const rect = appWindow.getBoundingClientRect();
+      windowLeft = rect.left;
+      windowTop = rect.top;
+      appWindow.style.position = 'fixed';
+      appWindow.style.left = windowLeft + 'px';
+      appWindow.style.top = windowTop + 'px';
+      appWindow.style.margin = '0';
+      appWindow.style.transform = 'none';
+      sounds.click();
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      let dx = e.clientX - dragStartX;
+      let dy = e.clientY - dragStartY;
+      appWindow.style.left = (windowLeft + dx) + 'px';
+      appWindow.style.top = (windowTop + dy) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    // Mobile drag support
+    windowHeader.addEventListener('touchstart', e => {
+      if (e.target.closest('.window-actions')) return;
+      isDragging = true;
+      const touch = e.touches[0];
+      dragStartX = touch.clientX;
+      dragStartY = touch.clientY;
+      const rect = appWindow.getBoundingClientRect();
+      windowLeft = rect.left;
+      windowTop = rect.top;
+      appWindow.style.position = 'fixed';
+      appWindow.style.left = windowLeft + 'px';
+      appWindow.style.top = windowTop + 'px';
+      appWindow.style.margin = '0';
+      appWindow.style.transform = 'none';
+    });
+
+    windowHeader.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      let dx = touch.clientX - dragStartX;
+      let dy = touch.clientY - dragStartY;
+      appWindow.style.left = (windowLeft + dx) + 'px';
+      appWindow.style.top = (windowTop + dy) + 'px';
+    });
+
+    windowHeader.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    function minimizeWindow() {
+      sounds.click();
+      if (isMinimized) {
+        appWindow.style.height = 'auto';
+        document.querySelector('.window-body').style.display = 'flex';
+        document.querySelector('.tabs-bar').style.display = 'flex';
+        isMinimized = false;
+      } else {
+        document.querySelector('.window-body').style.display = 'none';
+        document.querySelector('.tabs-bar').style.display = 'none';
+        isMinimized = true;
+      }
+    }
+
+    function maximizeWindow() {
+      sounds.click();
+      if (isMaximized) {
+        appWindow.style.position = 'relative';
+        appWindow.style.width = '100%';
+        appWindow.style.maxWidth = '650px';
+        appWindow.style.left = 'auto';
+        appWindow.style.top = 'auto';
+        appWindow.style.transform = 'none';
+        isMaximized = false;
+      } else {
+        appWindow.style.position = 'fixed';
+        appWindow.style.left = '10px';
+        appWindow.style.top = '70px';
+        appWindow.style.right = '10px';
+        appWindow.style.bottom = '70px';
+        appWindow.style.width = 'calc(100% - 20px)';
+        appWindow.style.maxWidth = 'none';
+        isMaximized = true;
+      }
+    }
+
+    function resetWindow() {
+      sounds.explosion();
+      spawnExplosion(window.innerWidth/2, window.innerHeight/2, 60);
+      appWindow.style.transform = 'scale(0)';
+      setTimeout(() => {
+        appWindow.style.transform = 'scale(1)';
+        appWindow.style.position = 'relative';
+        appWindow.style.width = '100%';
+        appWindow.style.maxWidth = '650px';
+        appWindow.style.left = 'auto';
+        appWindow.style.top = 'auto';
+        isMinimized = false;
+        isMaximized = false;
+        document.querySelector('.window-body').style.display = 'flex';
+        document.querySelector('.tabs-bar').style.display = 'flex';
+      }, 1500);
+    }
+
+    // Switch Tabs
+    function switchTab(tabId) {
+      sounds.click();
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+      // Active button styling
+      const clickedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.toLowerCase().includes(tabId));
+      if (clickedBtn) clickedBtn.classList.add('active');
+
+      const activeContent = document.getElementById(`tab-${tabId}`);
+      if (activeContent) activeContent.classList.add('active');
+
+      if (tabId === 'synth') {
+        initSynthVisualizer();
+      } else if (tabId === 'game') {
+        initGame();
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // 5. TERMINAL TYPEWRITER LOADER (STATUS)
+    // -------------------------------------------------------------------------
+    const termLines = [
+      "[SYSTEM] Booting operative matrix...",
+      "[SYSTEM] Aligning talent vectors...",
+      "[SYSTEM] Channeling grid core coordinates...",
+      "> Will make an impact. Standby...",
+      " "
+    ];
+    let termIndex = 0;
+    const termEl = document.getElementById('terminal-lines');
+
+    function typeTerminalLine() {
+      if (termIndex < termLines.length) {
+        const p = document.createElement('div');
+        p.className = 'status-line';
+        termEl.appendChild(p);
+        
+        let charIndex = 0;
+        const lineText = termLines[termIndex];
+        
+        function typeChar() {
+          if (charIndex < lineText.length) {
+            p.textContent += lineText.charAt(charIndex);
+            charIndex++;
+            if (soundEnabled && charIndex % 2 === 0) sounds.click();
+            setTimeout(typeChar, 25);
+          } else {
+            termIndex++;
+            setTimeout(typeTerminalLine, 200);
+          }
+        }
+        typeChar();
+      }
+    }
+
+    // Launch typing
+    setTimeout(typeTerminalLine, 500);
+
+    // Form Submission
+    function submitWaitlist(e) {
+      e.preventDefault();
+      const email = document.getElementById('waitlist-email').value;
+      const feedback = document.getElementById('form-feedback');
+      
+      // Save subscription locally
+      let subscriptions = JSON.parse(localStorage.getItem('pixellon_subs') || '[]');
+      subscriptions.push({ email, time: Date.now() });
+      localStorage.setItem('pixellon_subs', JSON.stringify(subscriptions));
+
+      // Visual feedback
+      const rect = e.target.querySelector('button').getBoundingClientRect();
+      spawnExplosion(rect.left + rect.width/2, rect.top + rect.height/2, 120, '#00E5FF');
+      
+      // Play achievement sounds
+      sounds.coin();
+      setTimeout(sounds.powerUp, 150);
+
+      document.getElementById('waitlist-email').value = '';
+      feedback.style.color = 'var(--cyan)';
+      feedback.textContent = '> SAVING EMAIL TO PIXELLON COG DATA... SECURED!';
+
+      // Simulate console print feedback
+      const successLine = document.createElement('div');
+      successLine.className = 'status-line highlight';
+      successLine.textContent = `> NEW CLIENT: ${email} JOINED THE VIBE`;
+      termEl.appendChild(successLine);
+      
+      setTimeout(() => {
+        feedback.textContent = '';
+      }, 5000);
+    }
+
+    // -------------------------------------------------------------------------
+    // 6. PIXEL AUDIO SYNTHESIS & WAVEFORM VISUALIZER
+    // -------------------------------------------------------------------------
+    function initSynthVisualizer() {
+      synthCanvas = document.getElementById('synth-canvas');
+      synthCtx = synthCanvas.getContext('2d');
+      synthCanvas.width = synthCanvas.parentElement.offsetWidth;
+      synthCanvas.height = synthCanvas.parentElement.offsetHeight;
+      
+      requestAnimationFrame(drawSynthVisualizer);
+    }
+
+    function triggerSynth(freq, type, label, keyIndex) {
+      // Color matching button indexes
+      const keyColors = ['#00E5FF', '#FFE600', '#FF6B6B', '#4D8EFF', '#00C853', '#FFFFFF'];
+      const activeColor = keyColors[keyIndex];
+
+      const keyEl = document.querySelectorAll('.synth-key')[keyIndex];
+      keyEl.classList.add('active');
+      setTimeout(() => keyEl.classList.remove('active'), 120);
+
+      playSynthTone(freq, type, 0.35);
+
+      // Trigger explosive pixel particles
+      const rect = keyEl.getBoundingClientRect();
+      spawnExplosion(rect.left + rect.width/2, rect.top + rect.height/2, 30, activeColor);
+    }
+
+    function drawSynthVisualizer() {
+      if (!synthCanvas || !synthCtx) return;
+      synthCtx.fillStyle = '#050505';
+      synthCtx.fillRect(0, 0, synthCanvas.width, synthCanvas.height);
+
+      if (currentToneOsc && Date.now() - currentToneOsc.time < currentToneOsc.duration * 1000) {
+        const timePassed = (Date.now() - currentToneOsc.time) / 1000;
+        const remaining = (currentToneOsc.duration - timePassed) / currentToneOsc.duration;
+
+        synthCtx.strokeStyle = 'var(--cyan)';
+        synthCtx.lineWidth = 3;
+        synthCtx.beginPath();
+
+        const step = 6;
+        for (let x = 0; x < synthCanvas.width; x += step) {
+          let y = synthCanvas.height / 2;
+          const scale = remaining * 30;
+          
+          if (currentToneOsc.type === 'sine') {
+            y += Math.sin(x * 0.05 + timePassed * 25) * scale;
+          } else if (currentToneOsc.type === 'square') {
+            y += Math.sign(Math.sin(x * 0.05 + timePassed * 25)) * scale;
+          } else if (currentToneOsc.type === 'sawtooth') {
+            y += ((x % 60) / 60 - 0.5) * 2 * scale;
+          } else {
+            y += (Math.random() - 0.5) * scale;
+          }
+
+          if (x === 0) synthCtx.moveTo(x, y);
+          else synthCtx.lineTo(x, y);
+        }
+        synthCtx.stroke();
+      } else {
+        // Draw static retro loading bar visualizer
+        synthCtx.strokeStyle = '#222';
+        synthCtx.lineWidth = 1;
+        synthCtx.beginPath();
+        synthCtx.moveTo(0, synthCanvas.height / 2);
+        synthCtx.lineTo(synthCanvas.width, synthCanvas.height / 2);
+        synthCtx.stroke();
+      }
+
+      requestAnimationFrame(drawSynthVisualizer);
+    }
+
+    // Keyboard trigger keys mapped for Synth Board
+    const synthKeyboardMapping = {
+      'a': () => triggerSynth(261.63, 'square', 'COIN', 0),
+      's': () => triggerSynth(293.66, 'sawtooth', 'LASER', 1),
+      'd': () => triggerSynth(329.63, 'triangle', 'WARP', 2),
+      'f': () => triggerSynth(392.00, 'square', 'JUMP', 3),
+      'g': () => triggerSynth(440.00, 'sawtooth', 'ZAP', 4),
+      'h': () => triggerSynth(523.25, 'sine', 'POWER', 5),
+    };
+
+    document.addEventListener('keydown', e => {
+      if (document.activeElement.tagName === 'INPUT') return;
+      const key = e.key.toLowerCase();
+      if (synthKeyboardMapping[key]) {
+        synthKeyboardMapping[key]();
+      }
+    });
+
+    // -------------------------------------------------------------------------
+    // 7. PLAYABLE RETRO MINI-GAME (PIXEL SNAKE)
+    // -------------------------------------------------------------------------
+    const gameCanvas = document.getElementById('game-canvas');
+    const gameCtx = gameCanvas.getContext('2d');
+    const overlay = document.getElementById('game-overlay');
+    
+    const gridCellSize = 10;
+    const gridCols = 30;
+    const gridRows = 20;
+
+    let snake = [];
+    let snakeDir = 'right';
+    let nextDir = 'right';
+    let food = { x: 0, y: 0 };
+    let score = 0;
+    let highscore = parseInt(localStorage.getItem('pixellon_snake_highscore') || '0');
+    let gameLoopInterval = null;
+    let gameSpeed = 100; // ms
+    let gameActive = false;
+
+    function initGame() {
+      gameCanvas.width = gridCols * gridCellSize;
+      gameCanvas.height = gridRows * gridCellSize;
+      document.getElementById('high-score').textContent = String(highscore).padStart(3, '0');
+      drawGameBoardEmpty();
+      renderScoreboard();
+    }
+
+    function drawGameBoardEmpty() {
+      gameCtx.fillStyle = '#050505';
+      gameCtx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+      
+      // subtle visual dot grid inside arcade
+      gameCtx.fillStyle = '#111';
+      for (let c = 0; c < gridCols; c++) {
+        for (let r = 0; r < gridRows; r++) {
+          gameCtx.fillRect(c * gridCellSize + 4, r * gridCellSize + 4, 2, 2);
+        }
+      }
+    }
+
+    function startGame() {
+      sounds.coin();
+      overlay.style.display = 'none';
+      score = 0;
+      updateScoreboard();
+      gameSpeed = 100;
+
+      snake = [
+        { x: 10, y: 10 },
+        { x: 9, y: 10 },
+        { x: 8, y: 10 }
+      ];
+      snakeDir = 'right';
+      nextDir = 'right';
+      spawnFood();
+
+      gameActive = true;
+      if (gameLoopInterval) clearInterval(gameLoopInterval);
+      gameLoopInterval = setInterval(gameLoop, gameSpeed);
+    }
+
+    function spawnFood() {
+      let valid = false;
+      while (!valid) {
+        food.x = Math.floor(Math.random() * gridCols);
+        food.y = Math.floor(Math.random() * gridRows);
+        
+        valid = !snake.some(segment => segment.x === food.x && segment.y === food.y);
+      }
+    }
+
+    function gameLoop() {
+      snakeDir = nextDir;
+      const head = { ...snake[0] };
+
+      switch (snakeDir) {
+        case 'up': head.y--; break;
+        case 'down': head.y++; break;
+        case 'left': head.x--; break;
+        case 'right': head.x++; break;
+      }
+
+      // Check crash
+      if (head.x < 0 || head.x >= gridCols || head.y < 0 || head.y >= gridRows ||
+          snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+        gameOver();
+        return;
+      }
+
+      snake.unshift(head);
+
+      // Check eating food
+      if (head.x === food.x && head.y === food.y) {
+        score += 10;
+        updateScoreboard();
+        sounds.coin();
+        
+        // Spawn canvas particle explosions internally in arcade coordinate space
+        const canvasRect = gameCanvas.getBoundingClientRect();
+        spawnExplosion(canvasRect.left + (food.x * gridCellSize) + 5, canvasRect.top + (food.y * gridCellSize) + 5, 12, '#FF3B30');
+
+        spawnFood();
+        
+        // Increase speed slightly
+        if (gameSpeed > 55) {
+          gameSpeed -= 2;
+          clearInterval(gameLoopInterval);
+          gameLoopInterval = setInterval(gameLoop, gameSpeed);
+        }
+      } else {
+        snake.pop();
+      }
+
+      drawGame();
+    }
+
+    function drawGame() {
+      drawGameBoardEmpty();
+
+      // Draw food
+      gameCtx.fillStyle = '#FF3B30';
+      gameCtx.fillRect(food.x * gridCellSize + 1, food.y * gridCellSize + 1, gridCellSize - 2, gridCellSize - 2);
+
+      // Draw snake
+      snake.forEach((seg, index) => {
+        gameCtx.fillStyle = '#FFFFFF';
+        gameCtx.fillRect(seg.x * gridCellSize + 1, seg.y * gridCellSize + 1, gridCellSize - 2, gridCellSize - 2);
+      });
+    }
+
+    function updateScoreboard() {
+      document.getElementById('current-score').textContent = String(score).padStart(3, '0');
+    }
+
+    function gameOver() {
+      gameActive = false;
+      clearInterval(gameLoopInterval);
+      sounds.explosion();
+
+      if (score > highscore) {
+        highscore = score;
+        localStorage.setItem('pixellon_snake_highscore', highscore);
+        document.getElementById('high-score').textContent = String(highscore).padStart(3, '0');
+      }
+
+      // Hide start screen, show game over screen
+      document.getElementById('game-start-screen').style.display = 'none';
+      document.getElementById('game-over-screen').style.display = 'block';
+
+      document.getElementById('game-over-text').textContent = `System Crashed. Final Score: ${score} points.`;
+
+      const qualifies = checkHighScore(score);
+      const submitContainer = document.getElementById('score-submit-container');
+      const restartBtn = document.getElementById('restart-btn');
+
+      if (qualifies) {
+        submitContainer.style.display = 'block';
+        restartBtn.textContent = 'SKIP & PLAY AGAIN ↻';
+        const nameInput = document.getElementById('player-name');
+        nameInput.value = '';
+        setTimeout(() => nameInput.focus(), 50);
+      } else {
+        submitContainer.style.display = 'none';
+        restartBtn.textContent = 'PLAY AGAIN ↻';
+      }
+
+      overlay.style.display = 'flex';
+    }
+
+    // Scoreboard functions
+    const SCOREBOARD_KEY = 'pixellon_snake_scoreboard';
+
+    function getScoreboard() {
+      const data = localStorage.getItem(SCOREBOARD_KEY);
+      if (!data) {
+        // Default retro high scores
+        return [
+          { name: 'NEO', score: 150 },
+          { name: 'TRIN', score: 120 },
+          { name: 'MORPHEUS', score: 90 },
+          { name: 'SMITH', score: 60 },
+          { name: 'CIPHER', score: 30 }
+        ];
+      }
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveScoreboard(scoreboard) {
+      localStorage.setItem(SCOREBOARD_KEY, JSON.stringify(scoreboard));
+    }
+
+    function checkHighScore(score) {
+      if (score <= 0) return false;
+      const scoreboard = getScoreboard();
+      if (scoreboard.length < 5) return true;
+      return score > scoreboard[scoreboard.length - 1].score;
+    }
+
+    function addScore(name, score) {
+      let scoreboard = getScoreboard();
+      scoreboard.push({ name: name.toUpperCase(), score: score, date: Date.now() });
+      scoreboard.sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        return a.date - b.date;
+      });
+      scoreboard = scoreboard.slice(0, 5);
+      saveScoreboard(scoreboard);
+      renderScoreboard();
+    }
+
+    function renderScoreboard() {
+      const scoreboard = getScoreboard();
+      const listEl = document.getElementById('leaderboard-list');
+      if (!listEl) return;
+      
+      listEl.innerHTML = '';
+      scoreboard.forEach((entry, index) => {
+        const li = document.createElement('li');
+        li.className = `scoreboard-item rank-${index + 1}`;
+        
+        const suffixes = ['ST', 'ND', 'RD', 'TH', 'TH'];
+        const rankStr = `${index + 1}${suffixes[index] || 'TH'}`;
+        
+        li.innerHTML = `
+          <span>${rankStr}<span class="scoreboard-name">${entry.name}</span></span>
+          <span class="val">${String(entry.score).padStart(3, '0')}</span>
+        `;
+        listEl.appendChild(li);
+      });
+    }
+
+    function submitScore(e) {
+      e.preventDefault();
+      const nameEl = document.getElementById('player-name');
+      const name = nameEl.value.trim();
+      if (!name) return;
+      
+      // Visual click feedback
+      sounds.coin();
+      
+      addScore(name, score);
+      showStartScreen();
+    }
+
+    function showStartScreen() {
+      document.getElementById('game-start-screen').style.display = 'block';
+      document.getElementById('game-over-screen').style.display = 'none';
+      overlay.style.display = 'flex';
+    }
+
+    // Keyboard handlers
+    document.addEventListener('keydown', e => {
+      if (!gameActive) return;
+      
+      switch (e.key) {
+        case 'ArrowUp':
+          if (snakeDir !== 'down') nextDir = 'up';
+          e.preventDefault();
+          break;
+        case 'ArrowDown':
+          if (snakeDir !== 'up') nextDir = 'down';
+          e.preventDefault();
+          break;
+        case 'ArrowLeft':
+          if (snakeDir !== 'right') nextDir = 'left';
+          e.preventDefault();
+          break;
+        case 'ArrowRight':
+          if (snakeDir !== 'left') nextDir = 'right';
+          e.preventDefault();
+          break;
+      }
+    });
+
+    // Touch handlers for D-Pad
+    function handleDpad(dir) {
+      if (!gameActive) return;
+      sounds.click();
+      
+      switch (dir) {
+        case 'up': if (snakeDir !== 'down') nextDir = 'up'; break;
+        case 'down': if (snakeDir !== 'up') nextDir = 'down'; break;
+        case 'left': if (snakeDir !== 'right') nextDir = 'left'; break;
+        case 'right': if (snakeDir !== 'left') nextDir = 'right'; break;
+      }
+    }
+  </script>
 </body>
 </html>
